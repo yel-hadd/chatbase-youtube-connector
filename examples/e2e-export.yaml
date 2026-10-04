@@ -8,3 +8,4 @@ jobs:
     exportDir: out
     sources:
       - channel: "@chatbase_"
+    maxVideos: 8

@@ -45,8 +45,11 @@ export function parseChapters(description: string | undefined): Chapter[] {
 const SENTENCE_END = /[.!?…]["')\]]?$/;
 const NOISE = /\[(?:music|applause|laughter|inaudible)\]|\((?:music|applause|laughter)\)/gi;
 
+// ">>" marks a speaker change in YouTube captions; it is noise in a knowledge source.
+const SPEAKER_CHANGE = /(^|\s)(?:>>|&gt;&gt;)+(?=\s|$)/g;
+
 function clean(text: string): string {
-  return text.replace(NOISE, ' ').replace(/\s+/g, ' ').trim();
+  return text.replace(NOISE, ' ').replace(SPEAKER_CHANGE, ' ').replace(/\s+/g, ' ').trim();
 }
 
 export interface Block {

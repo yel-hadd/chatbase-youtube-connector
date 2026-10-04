@@ -65,7 +65,7 @@ export function renderSummary(run: RunReport): string {
       '|---|---|---|---|---|---|---|',
       `| ${c.created} | ${c.updated} | ${c.deleted} | ${c.unchanged} | ${c.excluded} | ${c.failed} | ${c.planned} |`,
       '',
-      `Spend: up to ${usd(j.spend.estimatedMaxUsd)} estimated${j.spend.actualUsd !== undefined ? `, ${usd(j.spend.actualUsd)} actual` : ''}.`,
+      `Spend: up to ${usd(j.spend.estimatedMaxUsd)} estimated${j.spend.actualUsd !== undefined ? `, ${usd(j.spend.actualUsd)} Apify-reported run usage` : ''}.`,
     );
     const changed = j.videos.filter((v) => ['created', 'updated', 'deleted', 'failed', 'planned'].includes(v.action));
     if (changed.length) {

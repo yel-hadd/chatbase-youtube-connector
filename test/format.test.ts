@@ -49,6 +49,10 @@ describe('toBlocks', () => {
     ]);
     expect(b.map((x) => x.heading)).toEqual(['A', 'B', 'C']);
   });
+  it('drops speaker-change markers', () => {
+    const b = toBlocks([{ start: 0, end: 2, text: 'one >> >> two >>' }], 60);
+    expect(b[0]!.text).toBe('one two');
+  });
   it('drops caption noise tokens', () => {
     const b = toBlocks([{ start: 0, end: 2, text: '[Music] hello [Applause]' }], 60);
     expect(b[0]!.text).toBe('hello');

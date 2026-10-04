@@ -64,7 +64,10 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const recent = await discoverRecent(job.sources, deps.fetchFn);
       const fresh: VideoRef[] = [];
       for (const v of recent) {
-        if (ownedIds.has(v.id)) continue;
+        if (ownedIds.has(v.id)) {
+          record(report, { videoId: v.id, title: v.title, action: 'unchanged', detail: 'already synced' });
+          continue;
+        }
         const why = excludeReason(v, job);
         if (why) record(report, { videoId: v.id, title: v.title, action: 'excluded', detail: why });
         else fresh.push(v);

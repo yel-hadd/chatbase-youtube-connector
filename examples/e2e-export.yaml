@@ -1,0 +1,10 @@
+# Live smoke test: Chatbase's own channel, export sink, at most 3 videos (about $0.003).
+version: 1
+defaults:
+  budget: { maxUsdPerRun: 0.05, maxNewVideosPerRun: 3 }
+jobs:
+  - name: chatbase-channel
+    sink: export
+    exportDir: out
+    sources:
+      - channel: "@chatbase_"

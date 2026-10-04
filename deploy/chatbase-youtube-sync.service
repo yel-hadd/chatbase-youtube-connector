@@ -1,0 +1,16 @@
+# systemd alternative to the in-container scheduler.
+# Install: copy this file and chatbase-youtube-sync.timer to /etc/systemd/system/,
+# then: systemctl enable --now chatbase-youtube-sync.timer
+[Unit]
+Description=Sync YouTube videos into a Chatbase agent
+Wants=network-online.target
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/chatbase-youtube-sync
+ExecStart=/usr/bin/docker run --rm --env-file .env \
+  -v /opt/chatbase-youtube-sync/chatbase-youtube.yaml:/config/chatbase-youtube.yaml:ro \
+  -v /opt/chatbase-youtube-sync/data:/data \
+  --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
+  ghcr.io/use-app/chatbase-youtube-connector:latest --once

@@ -1,0 +1,991 @@
+[{
+  "metadata": {
+    "id": "tM3wpoieYTc",
+    "title": "Chatbase HelpDesk - AI Customer Support with Human Handoff Walkthrough",
+    "url": "https://www.youtube.com/watch?v=tM3wpoieYTc",
+    "description": "Chatbase HelpDesk manages support tickets, lets your team reply to customers live, handles handoffs from your AI agent, and keeps every conversation in one inbox.\n\nIn this demo we'll walk you through how your customer support agent hands those conversations off to your team with full context, and hands them right back when you're done. No separate tool, no manual tracking.\n\n00:00 - HelpDesk Introduction\n00:24 - AI-to-human handoff with full context\n00:56 - Comprehensive ticket management\n01:40 - Handing back to AI: return any ticket or live chat to the AI agent\n02:03 - Omnichannel support across email, chat, WhatsApp, and Instagram\n02:29 - Detailed analytics for improved support efficiency\n\n🔗 See Chatbase Helpdesk: https://www.chatbase.co/features/helpdesk\n🔗 Try Chatbase free: https://www.chatbase.co/\n\n#Helpdesk #AIHelpdesk #AICustomerSupport #SupportTickets #ChatbaseAI #HumanHandoff",
+    "duration": 193,
+    "view_count": 295,
+    "like_count": 6,
+    "channel": "Chatbase",
+    "channel_id": "UCpVc2Oc61kcUfBuz9lzP4MA",
+    "channel_url": "https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA",
+    "thumbnail": "https://i.ytimg.com/vi/tM3wpoieYTc/maxresdefault.jpg",
+    "upload_date": "20260715",
+    "tags": [
+      "custom chatgpt",
+      "customer support bot",
+      "custom ai",
+      "notion chatbot",
+      "notion gpt",
+      "artificial intelligence",
+      "openai",
+      "AI lead generation",
+      "lead generation",
+      "lead generator",
+      "customer support automation",
+      "automated lead generation",
+      "customer support ai",
+      "ai customer support bot",
+      "custom ai persona",
+      "ai personas"
+    ],
+    "categories": [
+      "Science & Technology"
+    ]
+  },
+  "language": "en",
+  "is_auto_generated": true,
+  "is_ai_generated": false,
+  "transcript_json": [
+    {
+      "start": 0,
+      "end": 3.08,
+      "text": "Hey everyone, today I'm walking you"
+    },
+    {
+      "start": 1.32,
+      "end": 5.640000000000001,
+      "text": "through our latest release, the help"
+    },
+    {
+      "start": 3.08,
+      "end": 7.88,
+      "text": "desk. We've already shown how AI agents"
+    },
+    {
+      "start": 5.64,
+      "end": 9.84,
+      "text": "can handle thousands of conversations"
+    },
+    {
+      "start": 7.88,
+      "end": 12.04,
+      "text": "all in one place. But the question is,"
+    },
+    {
+      "start": 9.84,
+      "end": 13.92,
+      "text": "what happens if they get asked like a"
+    },
+    {
+      "start": 12.04,
+      "end": 15.719999999999999,
+      "text": "sensitive question about billing for"
+    },
+    {
+      "start": 13.92,
+      "end": 17.84,
+      "text": "example that you would rather a human"
+    },
+    {
+      "start": 15.72,
+      "end": 20.04,
+      "text": "[music] handles, or if they straight up"
+    },
+    {
+      "start": 17.84,
+      "end": 22.72,
+      "text": "ask for a human to talk to?"
+    },
+    {
+      "start": 20.04,
+      "end": 23.58,
+      "text": "This is where our help desk comes in."
+    },
+    {
+      "start": 22.72,
+      "end": 24.08,
+      "text": "Let's look at an example."
+    },
+    {
+      "start": 23.58,
+      "end": 25.839999999999996,
+      "text": ">> [music]"
+    },
+    {
+      "start": 24.08,
+      "end": 28.439999999999998,
+      "text": ">> Here's a customer asking about a refund"
+    },
+    {
+      "start": 25.84,
+      "end": 30.6,
+      "text": "on their subscription. We've given AI"
+    },
+    {
+      "start": 28.44,
+      "end": 32.64,
+      "text": "agent instructions [music] to delete"
+    },
+    {
+      "start": 30.6,
+      "end": 35.28,
+      "text": "anything billing related straight to a"
+    },
+    {
+      "start": 32.64,
+      "end": 36.68,
+      "text": "human. So watch what happens. It hands"
+    },
+    {
+      "start": 35.28,
+      "end": 37.160000000000004,
+      "text": "the conversation off"
+    },
+    {
+      "start": 36.68,
+      "end": 39.72,
+      "text": ">> [music]"
+    },
+    {
+      "start": 37.16,
+      "end": 42.519999999999996,
+      "text": ">> and just like that, a ticket shows up"
+    },
+    {
+      "start": 39.72,
+      "end": 45.36,
+      "text": "for your team to pick up, and this is"
+    },
+    {
+      "start": 42.52,
+      "end": 47,
+      "text": "how our help [music] desk operates."
+    },
+    {
+      "start": 45.36,
+      "end": 49.125,
+      "text": "Instead of juggling like manual"
+    },
+    {
+      "start": 47,
+      "end": 51,
+      "text": "processes or vaulting on a separate tool"
+    },
+    {
+      "start": 49.125,
+      "end": 54.2,
+      "text": "[music] just to track who needs like a"
+    },
+    {
+      "start": 51,
+      "end": 55.675,
+      "text": "human, everything lives right here."
+    },
+    {
+      "start": 54.2,
+      "end": 55.96,
+      "text": "Take the inbox for example."
+    },
+    {
+      "start": 55.675,
+      "end": 58.68,
+      "text": ">> [music]"
+    },
+    {
+      "start": 55.96,
+      "end": 60.915,
+      "text": ">> Each team member can see which tickets"
+    },
+    {
+      "start": 58.68,
+      "end": 61.44,
+      "text": "are exactly assigned to them."
+    },
+    {
+      "start": 60.915,
+      "end": 63.28,
+      "text": ">> [music]"
+    },
+    {
+      "start": 61.44,
+      "end": 65.44,
+      "text": ">> And behind the scenes, we support"
+    },
+    {
+      "start": 63.28,
+      "end": 67.28,
+      "text": "workflows and automations to work around"
+    },
+    {
+      "start": 65.44,
+      "end": 69.96,
+      "text": "your team shifts and [music] schedules,"
+    },
+    {
+      "start": 67.28,
+      "end": 72.32000000000001,
+      "text": "so nothing falls through the cracks."
+    },
+    {
+      "start": 69.96,
+      "end": 74.02,
+      "text": "Now, let's actually open a ticket."
+    },
+    {
+      "start": 72.32,
+      "end": 75.67999999999999,
+      "text": "Your team member would be able to"
+    },
+    {
+      "start": 74.02,
+      "end": 77.36,
+      "text": "[music] see the full context of the"
+    },
+    {
+      "start": 75.68,
+      "end": 79.16000000000001,
+      "text": "issue right away."
+    },
+    {
+      "start": 77.36,
+      "end": 80.76,
+      "text": "So for example, right here they can see"
+    },
+    {
+      "start": 79.16,
+      "end": 81.92,
+      "text": "a quick summary of what the customer"
+    },
+    {
+      "start": 80.76,
+      "end": 83.80000000000001,
+      "text": "actually needs, [music] the full"
+    },
+    {
+      "start": 81.92,
+      "end": 86,
+      "text": "conversation history with the AI"
+    },
+    {
+      "start": 83.8,
+      "end": 88.52,
+      "text": "including every question that was asked,"
+    },
+    {
+      "start": 86,
+      "end": 89.52,
+      "text": "plus the customer's history, all in one"
+    },
+    {
+      "start": 88.52,
+      "end": 90.72,
+      "text": "place."
+    },
+    {
+      "start": 89.52,
+      "end": 92.72,
+      "text": "And from [music] there, updating the"
+    },
+    {
+      "start": 90.72,
+      "end": 95.16,
+      "text": "ticket is very easily. You can update"
+    },
+    {
+      "start": 92.72,
+      "end": 97.4,
+      "text": "the ticket status, you can draft a reply"
+    },
+    {
+      "start": 95.16,
+      "end": 98.25099999999999,
+      "text": "with AI, or you can leave an internal"
+    },
+    {
+      "start": 97.4,
+      "end": 98.56,
+      "text": "note for the team."
+    },
+    {
+      "start": 98.251,
+      "end": 100.80000000000001,
+      "text": ">> [music]"
+    },
+    {
+      "start": 98.56,
+      "end": 103.12,
+      "text": ">> And honestly, here's my favorite part."
+    },
+    {
+      "start": 100.8,
+      "end": 104.146,
+      "text": "Once you're done, whether it's a ticket"
+    },
+    {
+      "start": 103.12,
+      "end": 104.2,
+      "text": "or a live chat,"
+    },
+    {
+      "start": 104.146,
+      "end": 105.92,
+      "text": ">> [music]"
+    },
+    {
+      "start": 104.2,
+      "end": 108.16,
+      "text": ">> you can hand the conversation right back"
+    },
+    {
+      "start": 105.92,
+      "end": 109.84,
+      "text": "to the AI agent and let it take over"
+    },
+    {
+      "start": 108.16,
+      "end": 112.006,
+      "text": "again. So you wouldn't have to stress"
+    },
+    {
+      "start": 109.84,
+      "end": 113.64,
+      "text": "about. Zooming out, this view shows"
+    },
+    {
+      "start": 112.006,
+      "end": 115.64,
+      "text": "[music] every ticket for your whole"
+    },
+    {
+      "start": 113.64,
+      "end": 117.72,
+      "text": "team. You can also check all the"
+    },
+    {
+      "start": 115.64,
+      "end": 119.866,
+      "text": "unassigned tickets just in case anything"
+    },
+    {
+      "start": 117.72,
+      "end": 121.8,
+      "text": "slipped past your automations, or check"
+    },
+    {
+      "start": 119.866,
+      "end": 123.52,
+      "text": "[music] out that everything's already"
+    },
+    {
+      "start": 121.8,
+      "end": 126.03999999999999,
+      "text": "been closed."
+    },
+    {
+      "start": 123.52,
+      "end": 128.24,
+      "text": "And then, there's conversations. And"
+    },
+    {
+      "start": 126.04,
+      "end": 130.96,
+      "text": "this is [music] where you see every chat"
+    },
+    {
+      "start": 128.24,
+      "end": 131.60000000000002,
+      "text": "your AI agent has had across every"
+    },
+    {
+      "start": 130.96,
+      "end": 134.04000000000002,
+      "text": "channel. [music]"
+    },
+    {
+      "start": 131.6,
+      "end": 136.28,
+      "text": "I want you to think of Instagram, the"
+    },
+    {
+      "start": 134.04,
+      "end": 137.551,
+      "text": "chat widget, email,"
+    },
+    {
+      "start": 136.28,
+      "end": 137.88,
+      "text": "the messenger,"
+    },
+    {
+      "start": 137.551,
+      "end": 140.32,
+      "text": ">> [music]"
+    },
+    {
+      "start": 137.88,
+      "end": 141.959,
+      "text": ">> anywhere, you will be able to see it all"
+    },
+    {
+      "start": 140.32,
+      "end": 143.79999999999998,
+      "text": "in one place, and it would all show up."
+    },
+    {
+      "start": 141.959,
+      "end": 146.04,
+      "text": "You can even see the overall sentiment"
+    },
+    {
+      "start": 143.8,
+      "end": 148.36,
+      "text": "of each conversation, and [music] filter"
+    },
+    {
+      "start": 146.04,
+      "end": 150.44,
+      "text": "by it to zero in on what actually"
+    },
+    {
+      "start": 148.36,
+      "end": 152.72000000000003,
+      "text": "matters to you. And when you want to see"
+    },
+    {
+      "start": 150.44,
+      "end": 154.68,
+      "text": "the big picture, our help desk analytics"
+    },
+    {
+      "start": 152.72,
+      "end": 157.08,
+      "text": "dashboard gives you a quick glance at"
+    },
+    {
+      "start": 154.68,
+      "end": 159.68,
+      "text": "tickets created, tickets [music] solved,"
+    },
+    {
+      "start": 157.08,
+      "end": 161.56,
+      "text": "and what's trending over time."
+    },
+    {
+      "start": 159.68,
+      "end": 163.096,
+      "text": "And it's also a great way for you to"
+    },
+    {
+      "start": 161.56,
+      "end": 163.76,
+      "text": "spot patterns and gaps in your support,"
+    },
+    {
+      "start": 163.096,
+      "end": 165.959,
+      "text": "[music]"
+    },
+    {
+      "start": 163.76,
+      "end": 168.12,
+      "text": "like your median response rate or time"
+    },
+    {
+      "start": 165.959,
+      "end": 170.56,
+      "text": "to respond. So, yeah, that's our help"
+    },
+    {
+      "start": 168.12,
+      "end": 172.8,
+      "text": "desk. Your AI agents and your team"
+    },
+    {
+      "start": 170.56,
+      "end": 174.68,
+      "text": "working together all in one place, so"
+    },
+    {
+      "start": 172.8,
+      "end": 176.8,
+      "text": "nothing [music] gets missed out, and no"
+    },
+    {
+      "start": 174.68,
+      "end": 178.12,
+      "text": "customer gets left behind."
+    },
+    {
+      "start": 176.8,
+      "end": 179.472,
+      "text": "If you want to see how it fits in your"
+    },
+    {
+      "start": 178.12,
+      "end": 182.12,
+      "text": "own support setup, we'd love to show"
+    },
+    {
+      "start": 179.472,
+      "end": 182.12,
+      "text": "[music] you around."
+    }
+  ],
+  "transcript_llm": "Hey everyone, today I'm walking you through our latest release, the help desk. We've already shown how AI agents can handle thousands of conversations all in one place. But the question is, what happens if they get asked like a sensitive question about billing for example that you would rather a human handles, or if they straight up ask for a human to talk to? This is where our help desk comes in. Let's look at an example. >> >> Here's a customer asking about a refund on their subscription. We've given AI agent instructions to delete anything billing related straight to a human. So watch what happens. It hands the conversation off >> >> and just like that, a ticket shows up for your team to pick up, and this is how our help desk operates. Instead of juggling like manual processes or vaulting on a separate tool just to track who needs like a human, everything lives right here. Take the inbox for example. >> >> Each team member can see which tickets are exactly assigned to them. >> >> And behind the scenes, we support workflows and automations to work around your team shifts and schedules, so nothing falls through the cracks. Now, let's actually open a ticket. Your team member would be able to see the full context of the issue right away. So for example, right here they can see a quick summary of what the customer actually needs, the full conversation history with the AI including every question that was asked, plus the customer's history, all in one place. And from there, updating the ticket is very easily. You can update the ticket status, you can draft a reply with AI, or you can leave an internal note for the team. >> >> And honestly, here's my favorite part. Once you're done, whether it's a ticket or a live chat, >> >> you can hand the conversation right back to the AI agent and let it take over again. So you wouldn't have to stress about. Zooming out, this view shows every ticket for your whole team. You can also check all the unassigned tickets just in case anything slipped past your automations, or check out that everything's already been closed. And then, there's conversations. And this is where you see every chat your AI agent has had across every channel. I want you to think of Instagram, the chat widget, email, the messenger, >> >> anywhere, you will be able to see it all in one place, and it would all show up. You can even see the overall sentiment of each conversation, and filter by it to zero in on what actually matters to you. And when you want to see the big picture, our help desk analytics dashboard gives you a quick glance at tickets created, tickets solved, and what's trending over time. And it's also a great way for you to spot patterns and gaps in your support, like your median response rate or time to respond. So, yeah, that's our help desk. Your AI agents and your team working together all in one place, so nothing gets missed out, and no customer gets left behind. If you want to see how it fits in your own support setup, we'd love to show you around."
+},
+{
+  "metadata": {
+    "id": "R3omXx5vPqI",
+    "title": "Chatbase for Shopify - Install an AI Agent in Under 5 Minutes",
+    "url": "https://www.youtube.com/watch?v=R3omXx5vPqI",
+    "description": "Chatbase for Shopify is a native conversational AI agent that searches your live product catalog, recommends products, looks up orders, and adds items to the cart, all inside the chat, without a customer leaving the conversation.\n\nIn this walkthrough I install the Chatbase Shopify app on a store from scratch and turn on the actions that power it, product search, order lookup, and cart management, in under five minutes. No embed code, no developer knowledge.\n\n00:00 - The agent in action\n00:58 - Installing the Shopify app \n01:22 - Turn on actions in the editor\n01:34 - Configure Order lookup \n01:55 - Live on the store in under 5 min\n\n🔗 Full setup guide: https://www.chatbase.co/docs/user-guides/integrations/shopify\n🔗 Try Chatbase free: https://www.chatbase.co/\n\n\n#Shopify #ShopifyApps #EcommerceAI #AISalesAgent #ChatbaseAI #Ecommerce #aicustomerservice",
+    "duration": 163,
+    "view_count": 189,
+    "like_count": 3,
+    "channel": "Chatbase",
+    "channel_id": "UCpVc2Oc61kcUfBuz9lzP4MA",
+    "channel_url": "https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA",
+    "thumbnail": "https://i.ytimg.com/vi/R3omXx5vPqI/maxresdefault.jpg",
+    "upload_date": "20260716",
+    "tags": [
+      "custom chatgpt",
+      "customer support bot",
+      "custom ai",
+      "notion chatbot",
+      "notion gpt",
+      "artificial intelligence",
+      "openai",
+      "AI lead generation",
+      "lead generation",
+      "lead generator",
+      "customer support automation",
+      "automated lead generation",
+      "customer support ai",
+      "ai customer support bot",
+      "custom ai persona",
+      "ai personas"
+    ],
+    "categories": [
+      "Science & Technology"
+    ]
+  },
+  "language": "en",
+  "is_auto_generated": true,
+  "is_ai_generated": false,
+  "transcript_json": [
+    {
+      "start": 0,
+      "end": 3.56,
+      "text": "So, today I'm going to quickly go over"
+    },
+    {
+      "start": 1.64,
+      "end": 5.8,
+      "text": "how easy it is to set up and install the"
+    },
+    {
+      "start": 3.56,
+      "end": 7.92,
+      "text": "Chatbase Shopify app on your store so"
+    },
+    {
+      "start": 5.8,
+      "end": 9.52,
+      "text": "you can see just how fast it is."
+    },
+    {
+      "start": 7.92,
+      "end": 11.135,
+      "text": "I'll start by going over what this looks"
+    },
+    {
+      "start": 9.52,
+      "end": 11.2,
+      "text": "like on our Chatbase store,"
+    },
+    {
+      "start": 11.135,
+      "end": 12.8,
+      "text": ">> [music]"
+    },
+    {
+      "start": 11.2,
+      "end": 14.399999999999999,
+      "text": ">> which is actually where I get this super"
+    },
+    {
+      "start": 12.8,
+      "end": 17.080000000000002,
+      "text": "cool merch. So, I'm just going to open"
+    },
+    {
+      "start": 14.4,
+      "end": 19.68,
+      "text": "up the chat widget here and"
+    },
+    {
+      "start": 17.08,
+      "end": 23.04,
+      "text": "I'm looking for a t-shirt that's on"
+    },
+    {
+      "start": 19.68,
+      "end": 25.2,
+      "text": "sale, ideally a great one."
+    },
+    {
+      "start": 23.04,
+      "end": 27.24,
+      "text": "First, finding products. Chatbase is"
+    },
+    {
+      "start": 25.2,
+      "end": 29.6,
+      "text": "pulling real products from the live"
+    },
+    {
+      "start": 27.24,
+      "end": 30.13,
+      "text": "catalog on Shopify right in the chat"
+    },
+    {
+      "start": 29.6,
+      "end": 30.360000000000003,
+      "text": "window."
+    },
+    {
+      "start": 30.13,
+      "end": 31.88,
+      "text": ">> [music]"
+    },
+    {
+      "start": 30.36,
+      "end": 32.88,
+      "text": ">> So, it's not sharing a link to a search"
+    },
+    {
+      "start": 31.88,
+      "end": 34.8,
+      "text": "page."
+    },
+    {
+      "start": 32.88,
+      "end": 36.120000000000005,
+      "text": "It's showing real products with images"
+    },
+    {
+      "start": 34.8,
+      "end": 38.08,
+      "text": "and prices."
+    },
+    {
+      "start": 36.12,
+      "end": 39.599999999999994,
+      "text": "And I can go back and forth."
+    },
+    {
+      "start": 38.08,
+      "end": 41.36,
+      "text": "Actually, [music] do you have anything"
+    },
+    {
+      "start": 39.6,
+      "end": 43.08,
+      "text": "better for the fall? It does get kind of"
+    },
+    {
+      "start": 41.36,
+      "end": 44.72,
+      "text": "cold in Toronto."
+    },
+    {
+      "start": 43.08,
+      "end": 46.4,
+      "text": "It knows the website catalog and"
+    },
+    {
+      "start": 44.72,
+      "end": 48.68,
+      "text": "recommends exactly like an in-store"
+    },
+    {
+      "start": 46.4,
+      "end": 50.32,
+      "text": "associate would. Fun fact, that was"
+    },
+    {
+      "start": 48.68,
+      "end": 51.88,
+      "text": "actually my first job."
+    },
+    {
+      "start": 50.32,
+      "end": 54.12,
+      "text": "Now, the part that turns support into"
+    },
+    {
+      "start": 51.88,
+      "end": 55.88,
+      "text": "revenue, you can actually add this"
+    },
+    {
+      "start": 54.12,
+      "end": 57.599999999999994,
+      "text": "product [music] to the cart."
+    },
+    {
+      "start": 55.88,
+      "end": 59.120000000000005,
+      "text": "Done. So, that's the customer side of"
+    },
+    {
+      "start": 57.6,
+      "end": 61.36,
+      "text": "things. Now, let me show you what it"
+    },
+    {
+      "start": 59.12,
+      "end": 63.559999999999995,
+      "text": "takes to set up on my Shopify store."
+    },
+    {
+      "start": 61.36,
+      "end": 65.8,
+      "text": "So, here's my store with no Chatbase"
+    },
+    {
+      "start": 63.56,
+      "end": 66.88,
+      "text": "agent on it yet [music] and no products"
+    },
+    {
+      "start": 65.8,
+      "end": 69.16,
+      "text": "either."
+    },
+    {
+      "start": 66.88,
+      "end": 70.44,
+      "text": "All I need is go to the apps right over"
+    },
+    {
+      "start": 69.16,
+      "end": 72.84,
+      "text": "here."
+    },
+    {
+      "start": 70.44,
+      "end": 74.44,
+      "text": "Find Chatbase and install."
+    },
+    {
+      "start": 72.84,
+      "end": 76.08,
+      "text": "Now, watch this. Once I refresh my"
+    },
+    {
+      "start": 74.44,
+      "end": 78.36,
+      "text": "storefront, the widget [music] is"
+    },
+    {
+      "start": 76.08,
+      "end": 80.67999999999999,
+      "text": "already live. No need for any edits, no"
+    },
+    {
+      "start": 78.36,
+      "end": 81.72,
+      "text": "developers. The app actually handles it"
+    },
+    {
+      "start": 80.68,
+      "end": 83.80000000000001,
+      "text": "all."
+    },
+    {
+      "start": 81.72,
+      "end": 85.76,
+      "text": "Now, the last step, and this is where it"
+    },
+    {
+      "start": 83.8,
+      "end": 87.36,
+      "text": "gets powerful, actions. [music] This is"
+    },
+    {
+      "start": 85.76,
+      "end": 89.56,
+      "text": "what upgrades the agent from answering"
+    },
+    {
+      "start": 87.36,
+      "end": 93.12,
+      "text": "questions to actually doing things."
+    },
+    {
+      "start": 89.56,
+      "end": 94.72,
+      "text": "Product search on, order lookup on, cart"
+    },
+    {
+      "start": 93.12,
+      "end": 96.28,
+      "text": "management on."
+    },
+    {
+      "start": 94.72,
+      "end": 96.941,
+      "text": "And each one is configurable in the"
+    },
+    {
+      "start": 96.28,
+      "end": 97.16,
+      "text": "editor."
+    },
+    {
+      "start": 96.941,
+      "end": 99.28,
+      "text": ">> [music]"
+    },
+    {
+      "start": 97.16,
+      "end": 101.56,
+      "text": ">> Take order lookup for example. I can set"
+    },
+    {
+      "start": 99.28,
+      "end": 102.836,
+      "text": "exactly how it verifies the customer"
+    },
+    {
+      "start": 101.56,
+      "end": 102.96000000000001,
+      "text": "before sharing anything."
+    },
+    {
+      "start": 102.836,
+      "end": 105.6,
+      "text": ">> [music]"
+    },
+    {
+      "start": 102.96,
+      "end": 107.11999999999999,
+      "text": ">> Order number, phone number, email."
+    },
+    {
+      "start": 105.6,
+      "end": 108.731,
+      "text": "So, it's helpful without ever sharing"
+    },
+    {
+      "start": 107.12,
+      "end": 109,
+      "text": "someone else's order info."
+    },
+    {
+      "start": 108.731,
+      "end": 110.44,
+      "text": ">> [music]"
+    },
+    {
+      "start": 109,
+      "end": 112.8,
+      "text": ">> Everything you saw in the first half of"
+    },
+    {
+      "start": 110.44,
+      "end": 115.44,
+      "text": "this video is just these toggles"
+    },
+    {
+      "start": 112.8,
+      "end": 117.12,
+      "text": "connected to your store's real data."
+    },
+    {
+      "start": 115.44,
+      "end": 119.6,
+      "text": "And the question that buries every"
+    },
+    {
+      "start": 117.12,
+      "end": 123.76,
+      "text": "e-commerce store's inbox, where is my"
+    },
+    {
+      "start": 119.6,
+      "end": 123.75999999999999,
+      "text": "order? So, why don't we ask over here?"
+    },
+    {
+      "start": 124.92,
+      "end": 129.399,
+      "text": "And there [music] it is. Live status,"
+    },
+    {
+      "start": 127.04,
+      "end": 131.4,
+      "text": "carrier information, tracking number,"
+    },
+    {
+      "start": 129.399,
+      "end": 134.32,
+      "text": "pulled straight from Shopify. [music]"
+    },
+    {
+      "start": 131.4,
+      "end": 136.16,
+      "text": "Instantly, 24/7, no ticket, no, we'll"
+    },
+    {
+      "start": 134.32,
+      "end": 137.48,
+      "text": "get back to you in a couple days."
+    },
+    {
+      "start": 136.16,
+      "end": 139.76,
+      "text": "And there it is."
+    },
+    {
+      "start": 137.48,
+      "end": 141.44,
+      "text": "The same agent you watched at the start,"
+    },
+    {
+      "start": 139.76,
+      "end": 142.67999999999998,
+      "text": "now live on my store."
+    },
+    {
+      "start": 141.44,
+      "end": 144.24,
+      "text": "Total time,"
+    },
+    {
+      "start": 142.68,
+      "end": 145.88,
+      "text": "under 5 minutes."
+    },
+    {
+      "start": 144.24,
+      "end": 148.88,
+      "text": "If your support queue is full of where's"
+    },
+    {
+      "start": 145.88,
+      "end": 150.6,
+      "text": "my order, or do you have this in stock,"
+    },
+    {
+      "start": 148.88,
+      "end": 152.16,
+      "text": "the link's in the comments, or message"
+    },
+    {
+      "start": 150.6,
+      "end": 154.68,
+      "text": "me, [music] and I'll walk through it on"
+    },
+    {
+      "start": 152.16,
+      "end": 154.68,
+      "text": "your store."
+    }
+  ],
+  "transcript_llm": "So, today I'm going to quickly go over how easy it is to set up and install the Chatbase Shopify app on your store so you can see just how fast it is. I'll start by going over what this looks like on our Chatbase store, >> >> which is actually where I get this super cool merch. So, I'm just going to open up the chat widget here and I'm looking for a t-shirt that's on sale, ideally a great one. First, finding products. Chatbase is pulling real products from the live catalog on Shopify right in the chat window. >> >> So, it's not sharing a link to a search page. It's showing real products with images and prices. And I can go back and forth. Actually, do you have anything better for the fall? It does get kind of cold in Toronto. It knows the website catalog and recommends exactly like an in-store associate would. Fun fact, that was actually my first job. Now, the part that turns support into revenue, you can actually add this product to the cart. Done. So, that's the customer side of things. Now, let me show you what it takes to set up on my Shopify store. So, here's my store with no Chatbase agent on it yet and no products either. All I need is go to the apps right over here. Find Chatbase and install. Now, watch this. Once I refresh my storefront, the widget is already live. No need for any edits, no developers. The app actually handles it all. Now, the last step, and this is where it gets powerful, actions. This is what upgrades the agent from answering questions to actually doing things. Product search on, order lookup on, cart management on. And each one is configurable in the editor. >> >> Take order lookup for example. I can set exactly how it verifies the customer before sharing anything. >> >> Order number, phone number, email. So, it's helpful without ever sharing someone else's order info. >> >> Everything you saw in the first half of this video is just these toggles connected to your store's real data. And the question that buries every e-commerce store's inbox, where is my order? So, why don't we ask over here? And there it is. Live status, carrier information, tracking number, pulled straight from Shopify. Instantly, 24/7, no ticket, no, we'll get back to you in a couple days. And there it is. The same agent you watched at the start, now live on my store. Total time, under 5 minutes. If your support queue is full of where's my order, or do you have this in stock, the link's in the comments, or message me, and I'll walk through it on your store."
+}]

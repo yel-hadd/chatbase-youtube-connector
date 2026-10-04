@@ -1,0 +1,33 @@
+# For Chatbase Free/Hobby (no API access): build upload-ready files weekly and
+# keep them as a workflow artifact. Upload the files listed in CHANGES.txt via
+# Sources → Files in the Chatbase dashboard.
+name: Export YouTube transcripts for Chatbase
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      # Restore last run's files so only changed videos are rebuilt.
+      - uses: actions/cache@v4
+        with:
+          path: out
+          key: chatbase-export-${{ github.run_id }}
+          restore-keys: chatbase-export-
+      - uses: use-app/chatbase-youtube-connector@v1
+        with:
+          config: chatbase-youtube.export.yaml
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chatbase-upload
+          path: out

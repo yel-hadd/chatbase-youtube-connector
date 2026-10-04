@@ -1,0 +1,40 @@
+# .github/workflows/chatbase-youtube.yml
+# Adds new videos every day; re-checks the whole channel every Sunday
+# (picks up edited captions and, with prune: true, deleted videos).
+name: Sync YouTube to Chatbase
+on:
+  schedule:
+    - cron: '17 6 * * *'   # daily, new videos only (free RSS discovery)
+    - cron: '43 4 * * 0'   # Sunday, full re-check
+  workflow_dispatch:
+    inputs:
+      full: { type: boolean, default: false, description: Full re-check }
+      dry-run: { type: boolean, default: false, description: Plan only }
+
+concurrency:
+  group: chatbase-youtube-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: use-app/chatbase-youtube-connector@v1
+        with:
+          config: chatbase-youtube.yaml
+          full: ${{ github.event.schedule == '43 4 * * 0' || inputs.full == true }}
+          dry-run: ${{ inputs.dry-run == true }}
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          CHATBASE_API_KEY: ${{ secrets.CHATBASE_API_KEY }}
+          CHATBASE_AGENT_ID: ${{ vars.CHATBASE_AGENT_ID }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sync-report
+          path: report.json

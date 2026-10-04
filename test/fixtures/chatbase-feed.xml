@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <link rel="self" href="http://www.youtube.com/feeds/videos.xml?channel_id=UCpVc2Oc61kcUfBuz9lzP4MA"/>
+ <id>yt:channel:pVc2Oc61kcUfBuz9lzP4MA</id>
+ <yt:channelId>pVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+ <title>Chatbase</title>
+ <link rel="alternate" href="https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA"/>
+ <author>
+  <name>Chatbase</name>
+  <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+ </author>
+ <published>2023-04-05T19:16:39+00:00</published>
+ <entry>
+  <id>yt:video:5-zlK6vI2Q8</id>
+  <yt:videoId>5-zlK6vI2Q8</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>How OMR Uses a Chatbase Agent to Serve 70,000+ Attendees at Europe's Largest Marketing Conference</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=5-zlK6vI2Q8"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-09-04T20:57:15+00:00</published>
+  <updated>2026-09-27T15:30:05+00:00</updated>
+  <media:group>
+   <media:title>How OMR Uses a Chatbase Agent to Serve 70,000+ Attendees at Europe's Largest Marketing Conference</media:title>
+   <media:content url="https://www.youtube.com/v/5-zlK6vI2Q8?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/5-zlK6vI2Q8/hqdefault.jpg" width="480" height="360"/>
+   <media:description>00:00 From university conference to 70,000+ attendees
+00:26 The support challenge at scale
+00:50 Training the agent on years of attendee questions
+01:15 More time for complex support cases
+01:54 Personalizing the conference experience with AI
+02:12 The impact on support teams and attendee satisfaction
+
+OMR is the largest digital marketing and tech conference in Europe. 70,000+ attendees, 800+ speakers, and 1,000+ exhibitors come together for three days of keynotes, masterclasses, and side events.
+
+We traveled to Hamburg to hear how their team uses Chatbase to handle support at that scale.
+
+For years, their support team answered every question by hand, from ticket swaps to finding the nearest restroom. At that scale, the volume only kept growing. So they built a Chatbase AI agent trained on their own data, including years of attendee questions compiled into one knowledge base.
+
+The agent gives attendees instant, personalized answers and helps them build custom schedules based on their role, interests, and history. The support team now has more time to focus on complex cases that need a human.
+
+Learn more about Chatbase → https://www.chatbase.co
+Learn more about OMR → https://omr.com</media:description>
+   <media:community>
+    <media:starRating count="4" average="5.00" min="1" max="5"/>
+    <media:statistics views="162"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:G2rQ-R6Wk9c</id>
+  <yt:videoId>G2rQ-R6Wk9c</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>How Sandbox VR Uses Chatbase Agent to Help 1,000+ Employees Across 50+ Locations</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=G2rQ-R6Wk9c"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-08-14T15:48:55+00:00</published>
+  <updated>2026-10-01T20:35:21+00:00</updated>
+  <media:group>
+   <media:title>How Sandbox VR Uses Chatbase Agent to Help 1,000+ Employees Across 50+ Locations</media:title>
+   <media:content url="https://www.youtube.com/v/G2rQ-R6Wk9c?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/G2rQ-R6Wk9c/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Timestamps:
+0:00 – Welcome to Sandbox VR San Antonio
+0:38 – Haptic feedback vests explained
+01:14 – Asking Apollo to troubleshoot a haptic vest
+02:39 – Motion capture tracker technology
+03:03 – Inside the server room
+03:45 – Apollo helps identify headset-SPC connections
+04:39 – Post-experience videos &amp; casting with Apollo
+
+Description:
+We visited Sandbox VR's San Antonio location to see how their team uses Apollo, an internal AI agent powered by Chatbase, to solve problems in real time on the floor.
+
+Danielle from Sandbox VR's Learning and Development team walks us through the tech behind their immersive VR experiences: haptic vests, motion capture systems, server rooms, and souvenir videos. At each stop, she shows how Apollo replaces the need to search through SOPs, training manuals, or interrupt coworkers during live sessions.
+Apollo is trained on Sandbox VR's internal knowledge base and built using Chatbase's AI agent platform. Team members message Apollo directly and get instant troubleshooting steps, technical answers, and operational guidance.
+
+Learn more about Chatbase → https://www.chatbase.co
+ Learn more about Sandbox VR → https://sandboxvr.com</media:description>
+   <media:community>
+    <media:starRating count="4" average="5.00" min="1" max="5"/>
+    <media:statistics views="112"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:fq3x-zpy5JY</id>
+  <yt:videoId>fq3x-zpy5JY</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Chatbase Backstage - Manage Your AI Agent with Natural Language</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=fq3x-zpy5JY"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-07-22T16:41:15+00:00</published>
+  <updated>2026-10-02T07:15:10+00:00</updated>
+  <media:group>
+   <media:title>Chatbase Backstage - Manage Your AI Agent with Natural Language</media:title>
+   <media:content url="https://www.youtube.com/v/fq3x-zpy5JY?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/fq3x-zpy5JY/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Chatbase Backstage is an AI-powered operations center that lets you manage your agent through conversation.
+
+In this demo, Sia walks you through how Backstage works as both your analyst and your operator: asking for reports in plain language, surfacing the questions your agent couldn't answer, catching conflicts in your knowledge base, and building an action just by describing it, with a review step before anything goes live.
+
+00:00 - What Backstage is
+00:43 - As an analyst: reports, blind spots, and conflicts
+01:25 - As an operator: building an action
+02:02 - What else can it do
+
+Key features include:
+
+- Ask for reports in plain language: top topics, sentiment, key takeaways
+- Surface the questions your agent couldn't answer
+- Catch conflicts like outdated pricing and fix the source
+- Update your knowledge base by dropping in PDFs, docs, spreadsheets, or text
+- Build and edit actions by describing them, with a review step before anything goes live
+
+🔗 Backstage guide: https://www.chatbase.co/docs/user-guides/chatbot/backstage
+🔗 Try Chatbase free: https://www.chatbase.co/
+
+#Chatbase #AIAgent #Backstage #AIOperations #NoCode #CustomerSupport</media:description>
+   <media:community>
+    <media:starRating count="4" average="5.00" min="1" max="5"/>
+    <media:statistics views="412"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:R3omXx5vPqI</id>
+  <yt:videoId>R3omXx5vPqI</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Chatbase for Shopify - Install an AI Agent in Under 5 Minutes</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=R3omXx5vPqI"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-07-16T16:25:58+00:00</published>
+  <updated>2026-09-29T03:55:22+00:00</updated>
+  <media:group>
+   <media:title>Chatbase for Shopify - Install an AI Agent in Under 5 Minutes</media:title>
+   <media:content url="https://www.youtube.com/v/R3omXx5vPqI?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/R3omXx5vPqI/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Chatbase for Shopify is a native conversational AI agent that searches your live product catalog, recommends products, looks up orders, and adds items to the cart, all inside the chat, without a customer leaving the conversation.
+
+In this walkthrough I install the Chatbase Shopify app on a store from scratch and turn on the actions that power it, product search, order lookup, and cart management, in under five minutes. No embed code, no developer knowledge.
+
+00:00 - The agent in action
+00:58 - Installing the Shopify app 
+01:22 - Turn on actions in the editor
+01:34 - Configure Order lookup 
+01:55 - Live on the store in under 5 min
+
+🔗 Full setup guide: https://www.chatbase.co/docs/user-guides/integrations/shopify
+🔗 Try Chatbase free: https://www.chatbase.co/
+
+
+#Shopify #ShopifyApps #EcommerceAI #AISalesAgent #ChatbaseAI #Ecommerce #aicustomerservice</media:description>
+   <media:community>
+    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:statistics views="189"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:tM3wpoieYTc</id>
+  <yt:videoId>tM3wpoieYTc</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Chatbase HelpDesk - AI Customer Support with Human Handoff Walkthrough</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=tM3wpoieYTc"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-07-15T19:09:03+00:00</published>
+  <updated>2026-09-29T23:25:17+00:00</updated>
+  <media:group>
+   <media:title>Chatbase HelpDesk - AI Customer Support with Human Handoff Walkthrough</media:title>
+   <media:content url="https://www.youtube.com/v/tM3wpoieYTc?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/tM3wpoieYTc/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Chatbase HelpDesk manages support tickets, lets your team reply to customers live, handles handoffs from your AI agent, and keeps every conversation in one inbox.
+
+In this demo we'll walk you through how your customer support agent hands those conversations off to your team with full context, and hands them right back when you're done. No separate tool, no manual tracking.
+
+00:00 - HelpDesk Introduction
+00:24 - AI-to-human handoff with full context
+00:56 - Comprehensive ticket management
+01:40 - Handing back to AI: return any ticket or live chat to the AI agent
+02:03 - Omnichannel support across email, chat, WhatsApp, and Instagram
+02:29 - Detailed analytics for improved support efficiency
+
+🔗 See Chatbase Helpdesk: https://www.chatbase.co/features/helpdesk
+🔗 Try Chatbase free: https://www.chatbase.co/
+
+#Helpdesk #AIHelpdesk #AICustomerSupport #SupportTickets #ChatbaseAI #HumanHandoff</media:description>
+   <media:community>
+    <media:starRating count="6" average="5.00" min="1" max="5"/>
+    <media:statistics views="295"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:wUW8i-8POnM</id>
+  <yt:videoId>wUW8i-8POnM</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>How a Nonprofit Built a 24/7 Cancer Support Agent To Save Lives | Testicular Cancer Foundation</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=wUW8i-8POnM"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-06-16T13:23:10+00:00</published>
+  <updated>2026-09-29T14:16:24+00:00</updated>
+  <media:group>
+   <media:title>How a Nonprofit Built a 24/7 Cancer Support Agent To Save Lives | Testicular Cancer Foundation</media:title>
+   <media:content url="https://www.youtube.com/v/wUW8i-8POnM?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/wUW8i-8POnM/hqdefault.jpg" width="480" height="360"/>
+   <media:description>When someone finds a lump at 2 AM, they're scared, they're alone, and they're not ready to talk to anyone yet.
+
+The Testicular Cancer Foundation built something for that moment.
+The TC Navigator is an AI agent live on testicularcancer.org, built on Chatbase by a team of fewer than 10 people. It went from idea to deployed in under an hour, using clinical content TCF had already spent a year building.
+
+The Navigator isn't replacing TCF's team. It's the on-ramp. Men work through the hard questions anonymously first, get to a point of comfort, then reach out to a human already informed and a little less afraid.
+If you run a nonprofit or mission-driven org and you're wondering whether AI fits your work, this is what it can look like: not a glorified FAQ, but a support layer that shows up when your people can't.
+
+What happened next:
+
+→ 484 questions answered in the first few days
+→ 60 conversations handled with zero staff typing a word
+→ Patients reached across 12 countries, 28% from outside the US
+→ Automatic language detection in Portuguese, Turkish, German, and Spanish
+→ One survivor sent 157 messages in a single session, cross-referencing his own imaging against clinical guidelines
+
+Hear from Kenny Kane (CEO) on what they built, why it worked, and what the data surfaced that no survey ever could.
+
+Learn more about Chatbase → chatbase.co
+Learn more about the TCF → testicularcancer.org</media:description>
+   <media:community>
+    <media:starRating count="4" average="5.00" min="1" max="5"/>
+    <media:statistics views="130"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:W-zq6g9lM7A</id>
+  <yt:videoId>W-zq6g9lM7A</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Why Thotis Media Built 18 AI Agents to Guide 7 Million Students | Chatbase Customer Story</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=W-zq6g9lM7A"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-05-22T13:38:09+00:00</published>
+  <updated>2026-09-26T18:27:45+00:00</updated>
+  <media:group>
+   <media:title>Why Thotis Media Built 18 AI Agents to Guide 7 Million Students | Chatbase Customer Story</media:title>
+   <media:content url="https://www.youtube.com/v/W-zq6g9lM7A?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/W-zq6g9lM7A/hqdefault.jpg" width="480" height="360"/>
+   <media:description>How do you deploy AI agents at scale without hallucinations? Thotis Media built 18 specialized AI agents on Chatbase to guide 7 million French students through one of the most important decisions of their lives: what to do after high school. 
+
+In this customer story, Pierre Desbois, Data &amp; Marketing Director at Thotis Media, explains why they chose to build a constellation of specialized AI agents instead of a single generalist chatbot, and how official partnerships with the French Ministry of Education and Ministry of Higher Education ground every answer in trustworthy government data.</media:description>
+   <media:community>
+    <media:starRating count="8" average="5.00" min="1" max="5"/>
+    <media:statistics views="269"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:Ifkqr_9sZwI</id>
+  <yt:videoId>Ifkqr_9sZwI</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>How Opal's Small Team Supports Millions of Users | Chatbase Customer Story</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=Ifkqr_9sZwI"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-05-19T21:46:03+00:00</published>
+  <updated>2026-10-03T13:31:22+00:00</updated>
+  <media:group>
+   <media:title>How Opal's Small Team Supports Millions of Users | Chatbase Customer Story</media:title>
+   <media:content url="https://www.youtube.com/v/Ifkqr_9sZwI?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/Ifkqr_9sZwI/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Opal helps millions of people take their focus back from their phones. And they do it with a team of just 28. For modern teams, scaling support with AI is a given. The only question is how to do it while delivering the best possible customer experience. 
+
+CEO Kenneth Schlenker on choosing Chatbase: &quot;We wanted to figure out what parts we can automate with high quality self-serve, and what parts need personal human support. Chatbase has been a great partner for us to do that.&quot;</media:description>
+   <media:community>
+    <media:starRating count="8" average="5.00" min="1" max="5"/>
+    <media:statistics views="529"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:27x2PW6YD7g</id>
+  <yt:videoId>27x2PW6YD7g</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Chatbase Widgets - AI Customer Support Widgets Walkthrough</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=27x2PW6YD7g"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-05-13T16:11:07+00:00</published>
+  <updated>2026-09-27T15:53:07+00:00</updated>
+  <media:group>
+   <media:title>Chatbase Widgets - AI Customer Support Widgets Walkthrough</media:title>
+   <media:content url="https://www.youtube.com/v/27x2PW6YD7g?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/27x2PW6YD7g/hqdefault.jpg" width="480" height="360"/>
+   <media:description>In this video, we walk through a demo of a real world use case of widgets on a coffee machine website. We also walkthrough exactly how to use our new widgets builder and set them up on your website. 
+
+00:00 - Widgets Introduction
+00:24 - Showing End Result
+02:10 - Widgets Builder
+08:35 - Testing Widgets on Your Site
+09:30 - Adding Functions
+12:30 - More Use Cases
+
+---
+Chatbase widgets are changing how customers interact with AI agents on your site. Instead of typing back and forth in plain text, they get interactive elements right inside the conversation: calendar booking, pricing tables, lead capture forms, product cards, and more. Chatbase widgets work across SaaS, e-commerce, real estate, healthcare, financial services, and any business where customers need to take action, not just ask questions.
+
+Configure widgets with your own data (calendars, pricing, product catalog, lead fields) so every interaction stays accurate and on-brand. A customer asks about pricing and sees your actual pricing table. They want to book a demo and your real calendar shows up. They're ready to talk to sales and a lead capture form appears with the exact fields you need.
+
+Unlike traditional chat tools that bounce users off to separate pages or external forms, Chatbase widgets keep everything inside the chat. Customers stay in flow, conversion paths stay short, and your agent does the work end-to-end.
+
+🔗 Try Chatbase free: https://www.chatbase.co/
+#ChatWidgets #AIChatbot #ConversionOptimization #ChatbaseAI #CustomerExperience</media:description>
+   <media:community>
+    <media:starRating count="23" average="5.00" min="1" max="5"/>
+    <media:statistics views="1269"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:DPcltys1HWY</id>
+  <yt:videoId>DPcltys1HWY</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>On Attention, Productivity, and AI with Kenneth Schlenker of Opal</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=DPcltys1HWY"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-27T14:27:15+00:00</published>
+  <updated>2026-09-28T04:55:08+00:00</updated>
+  <media:group>
+   <media:title>On Attention, Productivity, and AI with Kenneth Schlenker of Opal</media:title>
+   <media:content url="https://www.youtube.com/v/DPcltys1HWY?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/DPcltys1HWY/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Kenneth Schlenker, founder and CEO of Opal, joins us for a coffee in Paris to discuss building the world's #1 screen time app. He covers Opal's mission to align technology with human well-being, the global productivity crisis, and where AI fits into a mission about less technology.
+
+This episode is the first in Chatbase Around the World, a series of sit-down conversations with founders and operators building the products we love.</media:description>
+   <media:community>
+    <media:starRating count="17" average="5.00" min="1" max="5"/>
+    <media:statistics views="213"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:cz5x7f50VWk</id>
+  <yt:videoId>cz5x7f50VWk</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>AI for Hospitality - AI Voice Agent Demo</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=cz5x7f50VWk"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-24T20:20:37+00:00</published>
+  <updated>2026-09-28T17:01:55+00:00</updated>
+  <media:group>
+   <media:title>AI for Hospitality - AI Voice Agent Demo</media:title>
+   <media:content url="https://www.youtube.com/v/cz5x7f50VWk?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i4.ytimg.com/vi/cz5x7f50VWk/hqdefault.jpg" width="480" height="360"/>
+   <media:description>In this video, we walk through a demo of a real world hotel use case of our voice agent. You'll see how it handles real conversations, pulls live data, and delivers answers instantly.
+
+00:00 - Introducing the Solution
+00:14 - Explanation of Chatbase Voice Agents
+00:19 - Hotel Booking Website Connected to Chatbase
+00:40 - Product Demo
+02:00 - Demo Recap
+02:14 - Comment Voice for a free demo
+
+---
+AI for hospitality is transforming how hotels, resorts, and booking platforms handle customer service. Chatbase AI voice agents work across hotels, restaurants, travel agencies, vacation rentals, and any hospitality business. Train your AI voice agent on your own data (room availability, pricing, amenities, policies, FAQs) so it gives accurate, on-brand answers to every guest.
+
+Unlike traditional hotel chatbots built on rigid decision trees and pre-written scripts, Chatbase AI voice agents use large language models to understand natural language and respond like a real front desk agent. Guests can speak naturally, ask follow-up questions, and book rooms instantly — 24/7, in any language.
+
+If you're comparing AI voice agents for hospitality like Fin, Ada, or Sierra, here's what makes Chatbase different:
+– AI voice and chat agents in one platform
+– Train on your exact hotel data, no code required
+– Live integrations with booking systems and PMS tools
+– Handles reservations, FAQs, upsells, and guest support end-to-end
+The fastest way to add an AI voice agent to your hospitality business in 2026.
+
+🔗 Try Chatbase free: https://www.chatbase.co/
+#AIForHospitality #AIVoiceAgent #HotelAI #ChatbaseAI #HospitalityTech</media:description>
+   <media:community>
+    <media:starRating count="15" average="5.00" min="1" max="5"/>
+    <media:statistics views="682"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:VG1h2Rvcrow</id>
+  <yt:videoId>VG1h2Rvcrow</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Hospitality AI - Voice Agent Booking Demo</title>
+  <link rel="alternate" href="https://www.youtube.com/shorts/VG1h2Rvcrow"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-23T20:01:53+00:00</published>
+  <updated>2026-09-29T21:53:45+00:00</updated>
+  <media:group>
+   <media:title>Hospitality AI - Voice Agent Booking Demo</media:title>
+   <media:content url="https://www.youtube.com/v/VG1h2Rvcrow?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i3.ytimg.com/vi/VG1h2Rvcrow/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Hospitality AI - Booking a weekend stay entirely through an AI Voice Agent from Chatbase</media:description>
+   <media:community>
+    <media:starRating count="3" average="5.00" min="1" max="5"/>
+    <media:statistics views="719"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:8Q9oZf4H5ZM</id>
+  <yt:videoId>8Q9oZf4H5ZM</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>AI Voice Agent for Customer Support | Build Your Own in Minutes (2026 Tutorial)</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=8Q9oZf4H5ZM"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-15T20:38:11+00:00</published>
+  <updated>2026-09-30T12:49:04+00:00</updated>
+  <media:group>
+   <media:title>AI Voice Agent for Customer Support | Build Your Own in Minutes (2026 Tutorial)</media:title>
+   <media:content url="https://www.youtube.com/v/8Q9oZf4H5ZM?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/8Q9oZf4H5ZM/hqdefault.jpg" width="480" height="360"/>
+   <media:description>In this video, we walk through how to set up a voice-powered AI customer service agent on Chatbase from scratch. You'll see how it handles real conversations, pulls live product data, and delivers answers instantly.
+
+00:00 - Introduction to Chatbase Voice Agents
+00:10 - Quick example of how it works
+00:44 - Setting up your voice agent
+00:56 - Credit Usage
+01:09 - Model
+01:15 - Temperature
+01:41 - Agent Voice
+02:00 - Messages
+02:28 - Recording
+02:36 - Limits
+
+---
+Whether you are running an e-commerce store, a SaaS business, a healthcare practice, a real estate agency, an education platform, or any other type of company, Chatbase agents work across all industries and platforms. You train your AI agent on your own data (product catalogs, FAQs, pricing pages, service descriptions, internal docs, policies) so the AI agent is able to give accurate, on-brand answers instead of generic responses.
+
+Unlike traditional chatbots that rely on rigid decision trees and pre-written scripts, Chatbase agents use large language models to understand natural language and respond conversationally. Customers can speak naturally, ask follow-up questions, and get real answers without waiting on hold or navigating through menus.
+
+If you have been comparing AI voice agents and chatbot solutions like Fin, Ada, or Sierra, you should know that Chatbase stands out for its simple yet powerful interface, supporting both chat &amp; voice experiences, and the ability to train agents on your exact data without writing any code.
+
+This is the fastest and easiest method to add AI capabilities to your customer service functions in 2026.
+
+🔗 Try Chatbase free: https://www.chatbase.co/</media:description>
+   <media:community>
+    <media:starRating count="11" average="5.00" min="1" max="5"/>
+    <media:statistics views="998"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:hG7ivnjsv2k</id>
+  <yt:videoId>hG7ivnjsv2k</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Chatbase Tutorial: How to Build an AI Customer Support Chatbot for E-commerce</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=hG7ivnjsv2k"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-10T19:05:47+00:00</published>
+  <updated>2026-09-29T06:09:10+00:00</updated>
+  <media:group>
+   <media:title>Chatbase Tutorial: How to Build an AI Customer Support Chatbot for E-commerce</media:title>
+   <media:content url="https://www.youtube.com/v/hG7ivnjsv2k?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i1.ytimg.com/vi/hG7ivnjsv2k/hqdefault.jpg" width="480" height="360"/>
+   <media:description>Setting up an AI customer support chatbot for your online store can cut support tickets by over 60% and handle customer queries for you around the clock. In this Chatbase tutorial, I show you the exact step-by-step process to build and deploy one from scratch.
+
+00:00 Why your e-commerce store needs an AI chatbot
+00:51 Introduction to Chatbase and how it works for e-commerce
+01:29 1-click integrations
+01:45 Set up custom AI actions like product recommendations and adding products
+03:06 Deploying to a live store
+
+----
+
+Whether you are running a Shopify store, a WooCommerce site, or a custom e-commerce build, this AI chatbot setup works across all major platforms. Chatbase lets you train a custom AI model on your store data, product FAQs, and return policies, so your chatbot gives accurate and on-brand answers instead of generic responses.
+
+What this tutorial covers:
+— How to create and configure your Chatbase account
+— How to train your AI chatbot on your store data and product information
+— How to customize the chatbot to match your brand
+— How to embed and deploy the chatbot on your e-commerce website
+— How to test and optimize your AI customer support flow
+
+If you have been comparing AI chatbot options for your e-commerce store and weighing up tools like Tidio, Intercom, Gorgias, etc. you should know that Chatbase stands out for its simplicity and the ability to train it on your exact store data without writing any code.
+
+This is the fastest and most powerful way to add automated AI customer support to an online store in 2026.
+
+🔗 Try Chatbase free: https://www.chatbase.co/</media:description>
+   <media:community>
+    <media:starRating count="14" average="5.00" min="1" max="5"/>
+    <media:statistics views="2252"/>
+   </media:community>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:A-5U72lw7Hk</id>
+  <yt:videoId>A-5U72lw7Hk</yt:videoId>
+  <yt:channelId>UCpVc2Oc61kcUfBuz9lzP4MA</yt:channelId>
+  <title>Best AI Chatbot for Shopify in 2026 | Chatbase Setup &amp; Full Walkthrough</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=A-5U72lw7Hk"/>
+  <author>
+   <name>Chatbase</name>
+   <uri>https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA</uri>
+  </author>
+  <published>2026-04-02T13:59:13+00:00</published>
+  <updated>2026-10-02T03:45:23+00:00</updated>
+  <media:group>
+   <media:title>Best AI Chatbot for Shopify in 2026 | Chatbase Setup &amp; Full Walkthrough</media:title>
+   <media:content url="https://www.youtube.com/v/A-5U72lw7Hk?version=3" type="application/x-shockwave-flash" width="640" height="390"/>
+   <media:thumbnail url="https://i2.ytimg.com/vi/A-5U72lw7Hk/hqdefault.jpg" width="480" height="360"/>
+   <media:description>If you're looking for the best AI chatbot for your Shopify store in 2026, 
+this video walks you through exactly why we think Chatbase is it — and 
+how to set it up in minutes.
+
+00:00 – Introduction
+00:14 – Creating your Chatbase agent with your Shopify store
+01:09 – Adding AI actions and syncing your product catalog
+02:42 – Testing your AI agent live on your store
+
+🔗 Try Chatbase free: https://www.chatbase.co/
+📖 Full Shopify integration guide: https://www.chatbase.co/docs/user-guides/chatbot/actions/shopify-actions
+
+---
+
+Chatbase is an AI agent for Shopify that connects directly to your store 
+and works right away out of the box. It answers customer questions, recommends products from your live catalog, tracks orders in real time, and lets shoppers manage their cart, all through a single chat widget embedded in your store.
+
+Most Shopify AI chatbot apps require complex setup or custom development. Chatbase connects to your Shopify store in a few clicks, syncs your full product catalog automatically, and updates in real time when inventory changes. No coding required.
+
+What your store gets with Chatbase:
+1/ AI-powered product recommendations: answers questions based on information from your product catalog and website
+2/ Cart management through chat interface: customers can add, view, and go to checkout
+3/ Customer support 24/7: reduces emails and ticket volume for your team
+4/ Automatic catalog sync: your agent always has the latest and most accurate product information
+5/ Order tracking: Real-time tracking and status updates without leaving your store interface
+
+Whether you're a Shopify merchant tired of answering the same support questions every day, or looking to increase conversions with an AI shopping assistant that actually knows your inventory, Chatbase is the Shopify AI chatbot built for stores that want to scale support and sales without scaling headcount.
+
+Free plan available. Setup takes minutes.</media:description>
+   <media:community>
+    <media:starRating count="14" average="5.00" min="1" max="5"/>
+    <media:statistics views="1281"/>
+   </media:community>
+  </media:group>
+ </entry>
+</feed>

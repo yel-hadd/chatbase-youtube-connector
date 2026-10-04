@@ -1,0 +1,28 @@
+#!/bin/sh
+# Container entrypoint.
+#   (no args)      run `sync` on $SCHEDULE (default: daily 06:17) plus a weekly full run on $FULL_SCHEDULE
+#   --once [args]  run a single `sync` and exit (systemd timers, Kubernetes CronJobs)
+#   anything else  passed straight to the CLI, e.g. `doctor` or `sync --dry-run`
+set -eu
+CLI="node /app/dist/cli.js -c ${CONFIG:-/config/chatbase-youtube.yaml}"
+
+ping() { [ -n "${HEALTHCHECK_URL:-}" ] && wget -q -O /dev/null "${HEALTHCHECK_URL}$1" 2>/dev/null || true; }
+
+run_sync() {
+  ping /start
+  if $CLI sync --report /data/report.json "$@"; then ping ""; else code=$?; ping "/$code"; return $code; fi
+  if [ -n "${REPORT_WEBHOOK_URL:-}" ]; then
+    wget -q -O /dev/null --header 'content-type: application/json' --post-file /data/report.json "$REPORT_WEBHOOK_URL" || true
+  fi
+}
+
+if [ "${1:-}" = "--once" ]; then shift; run_sync "$@"; exit $?; fi
+if [ "${1:-}" = "--run-sync" ]; then shift; run_sync "$@"; exit 0; fi
+if [ $# -gt 0 ]; then exec $CLI "$@"; fi
+
+cat > /tmp/crontab <<EOF
+${SCHEDULE:-17 6 * * *} /usr/local/bin/entrypoint.sh --run-sync
+${FULL_SCHEDULE:-43 4 * * 0} /usr/local/bin/entrypoint.sh --run-sync --full
+EOF
+echo "chatbase-youtube-sync: schedule '${SCHEDULE:-17 6 * * *}', full re-check '${FULL_SCHEDULE:-43 4 * * 0}'"
+exec supercronic -passthrough-logs /tmp/crontab

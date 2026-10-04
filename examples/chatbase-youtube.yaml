@@ -1,0 +1,29 @@
+# Full reference: docs/configuration.md
+version: 1
+defaults:
+  languages: [en]            # caption languages, in order of preference
+  machineTranslate: true     # translate captions from other languages, timestamps kept
+  segmentSeconds: 60         # one timestamped section about every minute
+  includeShorts: false
+  minDurationSec: 60
+  aiFallback:
+    enabled: true            # AI speech-to-text for videos without captions
+    maxMinutesPerRun: 120    # hard cap on AI minutes per run (cost control)
+    skipLongerThanMin: 90
+  budget:
+    maxUsdPerRun: 5          # abort before spending if the worst case is higher
+    maxNewVideosPerRun: 200
+    maxDeletesPerRun: 10
+    # storageLimitMb: 20     # your Chatbase plan's training limit (Standard = 20)
+  prune: false               # delete sources for videos removed from YouTube (full runs)
+
+jobs:
+  - name: academy
+    agentId: ${CHATBASE_AGENT_ID}
+    sources:
+      - channel: "@YourChannel"
+      # - playlist: "PLxxxxxxxxxxxxxxxx"
+      # - video: "https://www.youtube.com/watch?v=xxxxxxxxxxx"
+    filters:
+      titleExclude: ["(?i)#shorts|teaser|trailer"]
+      # publishedAfter: "2024-01-01"

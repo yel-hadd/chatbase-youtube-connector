@@ -1,0 +1,30 @@
+{
+  "name": "chatbase-youtube-sync",
+  "version": "0.1.0",
+  "description": "Keep a Chatbase AI agent trained on a YouTube channel, with timestamped answers. Runs on GitHub Actions or any VPS.",
+  "type": "module",
+  "bin": { "chatbase-youtube-sync": "dist/cli.js" },
+  "main": "dist/index.js",
+  "files": ["dist", "schema", "README.md", "LICENSE"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "dev": "tsx src/cli.ts"
+  },
+  "keywords": ["chatbase", "youtube", "transcripts", "rag", "github-actions", "apify", "ai-agent"],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "fast-xml-parser": "^4.5.0",
+    "yaml": "^2.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

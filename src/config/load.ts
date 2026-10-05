@@ -8,7 +8,10 @@ export function interpolateEnv(text: string, env: NodeJS.ProcessEnv = process.en
   return text.replace(/\$\{([A-Z0-9_]+)\}/g, (_m, name: string) => {
     const v = env[name];
     if (v === undefined || v === '') {
-      throw new UserError(`environment variable ${name} is referenced in the config but not set`, ExitCode.ConfigInvalid);
+      throw new UserError(
+        `environment variable ${name} is referenced in the config but not set`,
+        ExitCode.ConfigInvalid,
+      );
     }
     return v;
   });

@@ -47,7 +47,7 @@ async function main(): Promise<number> {
     .option('--pretty', 'human-readable logs instead of JSON lines', false)
     .hook('preAction', (cmd) => {
       const o = cmd.opts<{ logLevel: 'debug' | 'info' | 'warn' | 'error'; pretty: boolean }>();
-      configureLog({ level: o.logLevel, pretty: o.pretty || process.stderr.isTTY === true });
+      configureLog({ level: o.logLevel, pretty: o.pretty || process.stderr.isTTY });
     });
 
   program
@@ -60,7 +60,13 @@ async function main(): Promise<number> {
     .option('--report <path>', 'where to write the JSON report', 'report.json')
     .action(async (o: { job?: string; full: boolean; dryRun: boolean; allowMassDelete: boolean; report: string }) => {
       const jobs = selectJobs(await loadConfig(program.opts<{ config: string }>().config), o.job);
-      const run: RunReport = { schemaVersion: REPORT_SCHEMA_VERSION, tool: 'chatbase-youtube-sync', version: VERSION, jobs: [], exitCode: 0 };
+      const run: RunReport = {
+        schemaVersion: REPORT_SCHEMA_VERSION,
+        tool: 'chatbase-youtube-sync',
+        version: VERSION,
+        jobs: [],
+        exitCode: 0,
+      };
       for (const job of jobs) {
         log.info('job start', { job: job.name, sink: job.sink, full: o.full, dryRun: o.dryRun });
         const out = await syncJob(job, { provider: makeProvider(job), sink: makeSink(job) }, o);
@@ -87,7 +93,7 @@ async function main(): Promise<number> {
     .option('--job <name>', 'check only this job')
     .action(async (o: { job?: string }) => {
       const jobs = selectJobs(await loadConfig(program.opts<{ config: string }>().config), o.job);
-      const results: Array<[string, boolean, string]> = [];
+      const results: [string, boolean, string][] = [];
       const check = async (label: string, fn: () => Promise<string>): Promise<void> => {
         try {
           results.push([label, true, await fn()]);

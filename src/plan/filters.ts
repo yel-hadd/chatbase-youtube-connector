@@ -16,7 +16,11 @@ export function excludeReason(v: Filterable, job: Job): string | undefined {
   }
   if (v.durationSec !== undefined && v.durationSec < job.minDurationSec) return 'too-short';
   if (job.filters.publishedAfter && v.publishedAt && v.publishedAt < job.filters.publishedAfter) return 'too-old';
-  if (job.filters.titleInclude.length && v.title !== undefined && !job.filters.titleInclude.some((r) => toRegExp(r).test(title))) {
+  if (
+    job.filters.titleInclude.length &&
+    v.title !== undefined &&
+    !job.filters.titleInclude.some((r) => toRegExp(r).test(title))
+  ) {
     return 'title-not-included';
   }
   if (job.filters.titleExclude.some((r) => toRegExp(r).test(title))) return 'title-excluded';

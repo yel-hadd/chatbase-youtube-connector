@@ -37,8 +37,16 @@ function write(level: Level, msg: string, fields: Record<string, unknown> = {}):
 }
 
 export const log = {
-  debug: (m: string, f?: Record<string, unknown>) => write('debug', m, f),
-  info: (m: string, f?: Record<string, unknown>) => write('info', m, f),
-  warn: (m: string, f?: Record<string, unknown>) => write('warn', m, f),
-  error: (m: string, f?: Record<string, unknown>) => write('error', m, f),
+  debug: (m: string, f?: Record<string, unknown>) => {
+    write('debug', m, f);
+  },
+  info: (m: string, f?: Record<string, unknown>) => {
+    write('info', m, f);
+  },
+  warn: (m: string, f?: Record<string, unknown>) => {
+    write('warn', m, f);
+  },
+  error: (m: string, f?: Record<string, unknown>) => {
+    write('error', m, f);
+  },
 };

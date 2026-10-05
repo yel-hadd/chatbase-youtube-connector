@@ -69,7 +69,7 @@ export function parseVideoId(input: string): string | undefined {
   if (host === 'youtube.com' || host === 'music.youtube.com') {
     const v = u.searchParams.get('v');
     if (v && ID_RE.test(v)) return v;
-    const m = u.pathname.match(/^\/(?:shorts|embed|live|v)\/([A-Za-z0-9_-]{11})/);
+    const m = /^\/(?:shorts|embed|live|v)\/([A-Za-z0-9_-]{11})/.exec(u.pathname);
     if (m) return m[1];
   }
   return undefined;

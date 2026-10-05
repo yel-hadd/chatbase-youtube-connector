@@ -14,19 +14,29 @@ export const defaultRetry: RetryOptions = { retries: 5, baseDelayMs: 500, maxDel
 
 export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
+/** 429 means the request was not processed, so it is always safe to retry. */
+export function isRateLimited(e: unknown): boolean {
+  return e instanceof HttpError && e.status === 429;
+}
+
 /** 429, 5xx and network failures are retried; other 4xx are not. */
 export function isRetryable(e: unknown): boolean {
   if (e instanceof HttpError) return e.status === 429 || e.status >= 500;
   return e instanceof TypeError; // fetch network failure
 }
 
-export async function withRetry<T>(label: string, fn: () => Promise<T>, opts: RetryOptions = defaultRetry): Promise<T> {
+export async function withRetry<T>(
+  label: string,
+  fn: () => Promise<T>,
+  opts: RetryOptions = defaultRetry,
+  retryable: (e: unknown) => boolean = isRetryable,
+): Promise<T> {
   const nap = opts.sleep ?? sleep;
   for (let attempt = 0; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
-      if (attempt >= opts.retries || !isRetryable(e)) throw e;
+      if (attempt >= opts.retries || !retryable(e)) throw e;
       const retryAfter = e instanceof HttpError && e.retryAfterSec !== undefined ? e.retryAfterSec * 1000 : undefined;
       const backoff = Math.min(opts.maxDelayMs, opts.baseDelayMs * 2 ** attempt);
       const delay = retryAfter ?? Math.round(backoff / 2 + Math.random() * (backoff / 2));

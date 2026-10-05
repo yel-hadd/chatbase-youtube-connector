@@ -26,7 +26,9 @@ describe('youtube helpers', () => {
   });
   it('resolves a handle from the canonical link', async () => {
     const fakeFetch = (async () =>
-      new Response('<link rel="canonical" href="https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA">')) as typeof fetch;
+      new Response(
+        '<link rel="canonical" href="https://www.youtube.com/channel/UCpVc2Oc61kcUfBuz9lzP4MA">',
+      )) as typeof fetch;
     expect(await resolveChannelId('@chatbase_', fakeFetch)).toBe('UCpVc2Oc61kcUfBuz9lzP4MA');
   });
 });

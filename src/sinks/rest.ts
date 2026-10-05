@@ -2,7 +2,7 @@
 // Text sources train on write; there is no separate train call.
 
 import { HttpError, UserError, ExitCode } from '../util/errors.js';
-import { RateLimiter, readJson, sleep, withRetry, type FetchFn } from '../util/http.js';
+import { RateLimiter, isRateLimited, isRetryable, readJson, sleep, withRetry, type FetchFn } from '../util/http.js';
 import { log } from '../util/log.js';
 import { decodeName, PREFIX } from '../plan/naming.js';
 import type { OwnedSource } from '../types.js';
@@ -50,19 +50,29 @@ export class ChatbaseRestSink implements Sink {
     return `${API}/agents/${encodeURIComponent(this.agentId)}/sources`;
   }
 
-  private async call<T>(label: string, path: string, init: RequestInit = {}): Promise<T> {
-    return withRetry(label, async () => {
-      await this.limiter.take();
-      const res = await this.fetchFn(path, {
-        ...init,
-        headers: { authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json', ...(init.headers ?? {}) },
-      });
-      try {
-        return await readJson<T>(res, `Chatbase ${label}`);
-      } catch (e) {
-        throw this.translate(e);
-      }
-    });
+  private async call<T>(
+    label: string,
+    path: string,
+    init: RequestInit = {},
+    retryable: (e: unknown) => boolean = isRetryable,
+  ): Promise<T> {
+    return withRetry(
+      label,
+      async () => {
+        await this.limiter.take();
+        const res = await this.fetchFn(path, {
+          ...init,
+          headers: { authorization: `Bearer ${this.apiKey}`, 'content-type': 'application/json' },
+        });
+        try {
+          return await readJson<T>(res, `Chatbase ${label}`);
+        } catch (e) {
+          throw this.translate(e);
+        }
+      },
+      undefined,
+      retryable,
+    );
   }
 
   /** Map plan and auth errors to clear, non-retryable user errors. */
@@ -74,8 +84,11 @@ export class ChatbaseRestSink implements Sink {
         ExitCode.AuthOrPlan,
       );
     }
-    if (e.status === 401) return new UserError('Chatbase rejected the API key (401). Check CHATBASE_API_KEY.', ExitCode.AuthOrPlan);
-    if (e.status === 404) return new UserError(`Chatbase agent "${this.agentId}" was not found (404).`, ExitCode.ConfigInvalid);
+    if (e.status === 401)
+      return new UserError('Chatbase rejected the API key (401). Check CHATBASE_API_KEY.', ExitCode.AuthOrPlan);
+    if (e.code === 'AGENT_NOT_FOUND') {
+      return new UserError(`Chatbase agent "${this.agentId}" was not found. Check agentId.`, ExitCode.ConfigInvalid);
+    }
     if (e.code === 'SOURCE_SIZE_LIMIT_EXCEEDED') return new StorageLimitError(e.message);
     return e;
   }
@@ -91,7 +104,15 @@ export class ChatbaseRestSink implements Sink {
         const d = decodeName(s.name);
         // The API filter is a substring match, so confirm the prefix ourselves.
         if (!d || s.type !== 'text') continue;
-        out.push({ sourceId: s.id, videoId: d.videoId, hash: d.hash, part: d.part, name: s.name ?? '', size: s.size, status: s.status });
+        out.push({
+          sourceId: s.id,
+          videoId: d.videoId,
+          hash: d.hash,
+          part: d.part,
+          name: s.name ?? '',
+          size: s.size,
+          status: s.status,
+        });
       }
       cursor = page.pagination.hasMore ? page.pagination.cursor : null;
     } while (cursor);
@@ -99,14 +120,34 @@ export class ChatbaseRestSink implements Sink {
   }
 
   async create(_videoId: string, name: string, content: string, _meta: SourceMeta): Promise<void> {
-    await this.call('create source', this.base(), { method: 'POST', body: JSON.stringify({ type: 'text', name, content }) });
+    const body = JSON.stringify({ type: 'text', name, content });
+    // POST has no idempotency key. Only 429 (never processed) is retried blindly; after a
+    // 5xx or network error the source may exist, so look it up before trying again.
+    try {
+      await this.call('create source', this.base(), { method: 'POST', body }, isRateLimited);
+    } catch (e) {
+      if (!isRetryable(e)) throw e;
+      if (await this.existsByName(name)) return;
+      await this.call('create source (retry)', this.base(), { method: 'POST', body });
+    }
   }
 
-  async update(existing: OwnedSource, name: string, content: string, _meta: SourceMeta): Promise<void> {
+  private async existsByName(name: string): Promise<boolean> {
+    const qs = new URLSearchParams({ type: 'text', name, limit: '100' });
+    const page = await this.call<ListResponse>('find source', `${this.base()}?${qs}`);
+    return page.data.some((s) => s.name === name);
+  }
+
+  async update(existing: OwnedSource, name: string, content: string, meta: SourceMeta): Promise<void> {
     const path = `${this.base()}/${encodeURIComponent(existing.sourceId)}`;
     try {
       await this.call('update source', path, { method: 'PUT', body: JSON.stringify({ name, content }) });
     } catch (e) {
+      if (e instanceof HttpError && (e.code === 'SOURCE_PENDING_DELETION' || e.code === 'SOURCE_NOT_FOUND')) {
+        // Someone deleted it in the dashboard since we listed. Recreate it.
+        await this.create(existing.videoId, name, content, meta);
+        return;
+      }
       if (!(e instanceof HttpError && e.code === 'SOURCE_IS_TRAINING')) throw e;
       // One writer at a time: wait for the current training to land, then retry once.
       await this.waitTrained(existing.sourceId);
@@ -118,7 +159,8 @@ export class ChatbaseRestSink implements Sink {
     try {
       await this.call('delete source', `${this.base()}/${encodeURIComponent(existing.sourceId)}`, { method: 'DELETE' });
     } catch (e) {
-      if (e instanceof HttpError && (e.code === 'SOURCE_ALREADY_PENDING_DELETION' || e.status === 404)) return;
+      if (e instanceof HttpError && (e.code === 'SOURCE_ALREADY_PENDING_DELETION' || e.code === 'SOURCE_NOT_FOUND'))
+        return;
       throw e;
     }
   }

@@ -23,10 +23,31 @@ Chatbase can train on files, websites, text, Q&A, Notion and tickets, but not Yo
 YouTube RSS / channel listing ─► Apify transcript Actor ─► format (timestamped Markdown) ─► diff vs Chatbase ─► create / update / delete text sources
 ```
 
-| Run | Discovery | What it does |
-|---|---|---|
-| `sync` (daily) | RSS feed, free, newest 15 videos per source | Transcribes and adds videos you don't have yet |
+| Run                    | Discovery                                      | What it does                                                                                  |
+| ---------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `sync` (daily)         | RSS feed, free, newest 15 videos per source    | Transcribes and adds videos you don't have yet                                                |
 | `sync --full` (weekly) | Full channel or playlist listing via the Actor | Also updates changed transcripts and, with `prune: true`, removes videos deleted from YouTube |
+
+## Choose exactly which videos go in
+
+```yaml
+jobs:
+  - name: academy
+    agentId: ${CHATBASE_AGENT_ID}
+    sources: # only what you list is synced
+      - channel: '@AcmeAcademy' # a whole channel…
+      - playlist: 'PLxxxxxxxx' # …or just some playlists
+      - video: 'https://youtu.be/xxxxxxxxxxx' # …or single videos
+    exclude: # keep these out, even if a source includes them
+      - 'https://youtu.be/yyyyyyyyyyy'
+      - 'PLzzzzzzzz' # every video in this playlist
+    filters:
+      titleExclude: ['(?i)teaser|trailer']
+      publishedAfter: '2024-01-01'
+    prune: true # also remove excluded or deleted videos already in the agent
+```
+
+Every option is documented in [docs/configuration.md](docs/configuration.md).
 
 ## Quick start: GitHub Actions
 
@@ -37,7 +58,7 @@ YouTube RSS / channel listing ─► Apify transcript Actor ─► format (times
      - name: academy
        agentId: ${CHATBASE_AGENT_ID}
        sources:
-         - channel: "@YourChannel"
+         - channel: '@YourChannel'
    ```
 2. Add secrets in **Settings → Secrets and variables → Actions**:
    - secret `APIFY_TOKEN`: [get a free Apify account](https://apify.com?fpr=use-apify), then Settings → API & Integrations;
@@ -70,13 +91,13 @@ npx chatbase-youtube-sync sync --full          # re-check everything
 npx chatbase-youtube-sync validate             # print the resolved config
 ```
 
-| Exit code | Meaning |
-|---|---|
-| 0 | Success |
-| 2 | Config invalid |
-| 3 | Budget, storage or delete cap would be exceeded (nothing was spent or written) |
-| 4 | Partial failure (some videos failed; the rest are synced) |
-| 5 | Auth or plan problem (e.g. Chatbase API needs Standard) |
+| Exit code | Meaning                                                                        |
+| --------- | ------------------------------------------------------------------------------ |
+| 0         | Success                                                                        |
+| 2         | Config invalid                                                                 |
+| 3         | Budget, storage or delete cap would be exceeded (nothing was spent or written) |
+| 4         | Partial failure (some videos failed; the rest are synced)                      |
+| 5         | Auth or plan problem (e.g. Chatbase API needs Standard)                        |
 
 Each run writes `report.json`, which lists counts, every video's outcome, estimated and actual spend, and storage before and after. In GitHub Actions the same summary appears on the run page.
 
@@ -92,10 +113,10 @@ Add this to your agent's instructions in Chatbase:
 
 ## Costs, worked through
 
-| Scenario | Apify cost |
-|---|---|
-| Daily run, no new videos | $0 (RSS only) |
-| 1 new video with captions | ≈ $0.001 |
+| Scenario                                                | Apify cost                                   |
+| ------------------------------------------------------- | -------------------------------------------- |
+| Daily run, no new videos                                | $0 (RSS only)                                |
+| 1 new video with captions                               | ≈ $0.001                                     |
 | Backfill 300 videos × 20 min, 20% without captions (AI) | 300 × $0.001 + 60 × 20 × $0.012 ≈ **$14.70** |
 
 Storage: an hour of speech is roughly 55–65 KB of text. Chatbase plans allow 1, 10, 20 or 40 MB of training content (Free, Hobby, Standard, Pro). Set `budget.storageLimitMb` and the run stops before it would go over.

@@ -32,7 +32,12 @@ export interface RunReport {
   exitCode: number;
 }
 
-export function newJobReport(job: string, sink: 'rest' | 'export', mode: 'incremental' | 'full', dryRun: boolean): JobReport {
+export function newJobReport(
+  job: string,
+  sink: 'rest' | 'export',
+  mode: 'incremental' | 'full',
+  dryRun: boolean,
+): JobReport {
   return {
     job,
     sink,
@@ -71,7 +76,9 @@ export function renderSummary(run: RunReport): string {
     if (changed.length) {
       lines.push('', '| Video | Action | Detail |', '|---|---|---|');
       for (const v of changed.slice(0, 50)) {
-        lines.push(`| [${(v.title ?? v.videoId).replace(/\|/g, '/')}](https://youtu.be/${v.videoId}) | ${v.action} | ${v.detail ?? ''} |`);
+        lines.push(
+          `| [${(v.title ?? v.videoId).replace(/\|/g, '/')}](https://youtu.be/${v.videoId}) | ${v.action} | ${v.detail ?? ''} |`,
+        );
       }
       if (changed.length > 50) lines.push(`| … | ${changed.length - 50} more | |`);
     }

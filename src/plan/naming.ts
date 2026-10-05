@@ -25,15 +25,19 @@ export function contentHash(parts: string[]): string {
 export function encodeName(videoId: string, hash: string, title: string, part = 1): string {
   const head = `${PREFIX}${videoId}${SEP}${hash}${SEP}${part > 1 ? `p${part}${SEP}` : ''}`;
   const clean = title.replace(/\s+/g, ' ').trim() || videoId;
-  const room = MAX_NAME - head.length;
-  const chars = [...clean];
-  const t = chars.length > room ? chars.slice(0, Math.max(0, room - 1)).join('') + '…' : clean;
-  return head + t;
+  // Chatbase validates the 100 limit in UTF-16 code units (JSON Schema maxLength), so an
+  // emoji counts as 2. Trim whole graphemes (never half an emoji) until the name fits.
+  if (head.length + clean.length <= MAX_NAME) return head + clean;
+  const chars = Array.from(new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(clean), (g) => g.segment);
+  while (chars.length && head.length + chars.join('').length + 1 > MAX_NAME) chars.pop();
+  return `${head}${chars.join('')}…`;
 }
 
-export function decodeName(name: string | null | undefined): { videoId: string; hash: string; part: number } | undefined {
+export function decodeName(
+  name: string | null | undefined,
+): { videoId: string; hash: string; part: number } | undefined {
   if (!name) return undefined;
-  const m = name.match(RE);
+  const m = RE.exec(name);
   if (!m) return undefined;
   return { videoId: m[1]!, hash: m[2]!, part: m[3] ? Number(m[3]) : 1 };
 }

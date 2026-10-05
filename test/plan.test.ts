@@ -11,11 +11,20 @@ describe('naming', () => {
     expect(decodeName(n)).toEqual({ videoId: 'tM3wpoieYTc', hash: 'abcdef12', part: 1 });
   });
   it('encodes parts', () => {
-    expect(decodeName(encodeName('tM3wpoieYTc', 'abcdef12', 't', 3))).toEqual({ videoId: 'tM3wpoieYTc', hash: 'abcdef12', part: 3 });
+    expect(decodeName(encodeName('tM3wpoieYTc', 'abcdef12', 't', 3))).toEqual({
+      videoId: 'tM3wpoieYTc',
+      hash: 'abcdef12',
+      part: 3,
+    });
+  });
+  it('keeps emoji titles within 100 UTF-16 units, the unit Chatbase validates', () => {
+    const n = encodeName('tM3wpoieYTc', 'abcdef12', '🚀 launch '.repeat(20));
+    expect(n.length).toBeLessThanOrEqual(MAX_NAME);
+    expect(decodeName(n)?.videoId).toBe('tM3wpoieYTc');
   });
   it('truncates long and unicode titles to 100 characters', () => {
     const n = encodeName('tM3wpoieYTc', 'abcdef12', '日本語のタイトル '.repeat(20));
-    expect([...n].length).toBeLessThanOrEqual(MAX_NAME);
+    expect(n.length).toBeLessThanOrEqual(MAX_NAME);
     expect(n.endsWith('…')).toBe(true);
     expect(decodeName(n)?.videoId).toBe('tM3wpoieYTc');
   });
@@ -37,7 +46,9 @@ describe('parseVideoId', () => {
     ['https://www.youtube.com/shorts/VG1h2Rvcrow', 'VG1h2Rvcrow'],
     ['tM3wpoieYTc', 'tM3wpoieYTc'],
     ['https://example.com/watch?v=tM3wpoieYTc', undefined],
-  ])('%s', (input, want) => expect(parseVideoId(input)).toBe(want));
+  ])('%s', (input, want) => {
+    expect(parseVideoId(input)).toBe(want);
+  });
 });
 
 const vid = (id: string, hash: string, parts = 1): FormattedVideo => ({
@@ -72,7 +83,9 @@ describe('planOps', () => {
   });
   it('adds and removes parts when a video grows or shrinks', () => {
     expect(planOps([vid(A, '22222222', 2)], [own(A, '11111111')]).map((o) => o.kind)).toEqual(['update', 'create']);
-    expect(planOps([vid(A, '22222222', 1)], [own(A, '11111111', 1), own(A, '11111111', 2)]).map((o) => o.kind)).toEqual(['update', 'delete']);
+    expect(planOps([vid(A, '22222222', 1)], [own(A, '11111111', 1), own(A, '11111111', 2)]).map((o) => o.kind)).toEqual(
+      ['update', 'delete'],
+    );
   });
   it('deletes videos gone from YouTube', () => {
     const ops = planOps([], [own(B, '11111111')], [B]);

@@ -1,5 +1,5 @@
 import type { Job } from './config/schema.js';
-import { discoverRecent, sourceListingUrl } from './discover/youtube.js';
+import { classifyRef, discoverRecent, listPlaylist, sourceListingUrl, warnTruncated } from './discover/youtube.js';
 import { formatTranscript } from './format/markdown.js';
 import { contentHash } from './plan/naming.js';
 import { planOps, type FormattedVideo, type Op } from './plan/diff.js';
@@ -56,6 +56,16 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
     const ownedIds = new Set(owned.map((o) => o.videoId));
     log.info('inventory loaded', { job: job.name, ownedSources: owned.length, ownedVideos: ownedIds.size });
 
+    const excluded = await resolveExclusions(job, deps.fetchFn);
+    const excludedOwned = [...ownedIds].filter((id) => excluded.has(id));
+    for (const id of excludedOwned) {
+      if (job.prune) {
+        if (opts.dryRun) record(report, { videoId: id, action: 'planned', detail: 'would delete (excluded)' });
+      } else {
+        record(report, { videoId: id, action: 'excluded', detail: 'still in the agent; set prune: true to remove it' });
+      }
+    }
+
     let transcripts: Transcript[] = [];
     let goneIds: string[] = [];
 
@@ -64,6 +74,11 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const recent = await discoverRecent(job.sources, deps.fetchFn);
       const fresh: VideoRef[] = [];
       for (const v of recent) {
+        if (excluded.has(v.id)) {
+          if (!ownedIds.has(v.id))
+            record(report, { videoId: v.id, title: v.title, action: 'excluded', detail: 'excluded in config' });
+          continue;
+        }
         if (ownedIds.has(v.id)) {
           record(report, { videoId: v.id, title: v.title, action: 'unchanged', detail: 'already synced' });
           continue;
@@ -78,11 +93,15 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const over = overSpend(job, est);
       if (over) throw new UserError(over, ExitCode.BudgetExceeded);
       if (opts.dryRun) {
-        for (const v of batch) record(report, { videoId: v.id, title: v.title, action: 'planned', detail: 'would transcribe and create' });
+        for (const v of batch)
+          record(report, { videoId: v.id, title: v.title, action: 'planned', detail: 'would transcribe and create' });
         return done(report, ExitCode.Ok);
       }
       if (batch.length) {
-        const res = await deps.provider.transcribe(batch.map((v) => watchUrl(v.id)), transcribeOpts(job, job.aiFallback.enabled));
+        const res = await deps.provider.transcribe(
+          batch.map((v) => watchUrl(v.id)),
+          transcribeOpts(job, job.aiFallback.enabled),
+        );
         collect(report, res);
         transcripts = res.transcripts;
       }
@@ -95,7 +114,11 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const over = overSpend(job, est);
       if (over) throw new UserError(`${over}. Lower maxVideos or raise the budget.`, ExitCode.BudgetExceeded);
       if (opts.dryRun) {
-        record(report, { videoId: '-', action: 'planned', detail: `would list up to ${job.maxVideos} videos per source and diff against ${ownedIds.size} owned videos` });
+        record(report, {
+          videoId: '-',
+          action: 'planned',
+          detail: `would list up to ${job.maxVideos} videos per source and diff against ${ownedIds.size} owned videos`,
+        });
         return done(report, ExitCode.Ok);
       }
       const listing = await deps.provider.transcribe(urls, transcribeOpts(job, false, job.maxVideos));
@@ -104,7 +127,9 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       transcripts = listing.transcripts;
 
       if (job.aiFallback.enabled) {
-        const needAi = listing.failures.filter((f) => f.code === 'NO_CAPTIONS_AVAILABLE' && !ownedIds.has(f.id)).map((f) => f.id);
+        const needAi = listing.failures
+          .filter((f) => f.code === 'NO_CAPTIONS_AVAILABLE' && !ownedIds.has(f.id))
+          .map((f) => f.id);
         if (needAi.length) {
           const ai = await deps.provider.transcribe(needAi.map(watchUrl), transcribeOpts(job, true));
           collect(report, ai);
@@ -132,13 +157,20 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
     // Filter the transcripts we got (the Actor knows durations; RSS does not).
     const formatted: FormattedVideo[] = [];
     for (const t of transcripts) {
+      if (excluded.has(t.id)) {
+        if (!ownedIds.has(t.id))
+          record(report, { videoId: t.id, title: t.title, action: 'excluded', detail: 'excluded in config' });
+        continue;
+      }
       const why = ownedIds.has(t.id) ? undefined : excludeReason(t, job);
       if (why) record(report, { videoId: t.id, title: t.title, action: 'excluded', detail: why });
       else formatted.push(format(job, t));
     }
 
-    const ops = planOps(formatted, owned, goneIds);
-    const deletes = ops.filter((o) => o.kind === 'delete' && o.reason === 'removed-from-youtube');
+    const ops = planOps(formatted, owned, goneIds, job.prune ? excludedOwned : []);
+    const deletes = ops.filter(
+      (o) => o.kind === 'delete' && (o.reason === 'removed-from-youtube' || o.reason === 'excluded'),
+    );
     if (deletes.length > job.budget.maxDeletesPerRun && !opts.allowMassDelete) {
       throw new UserError(
         `${deletes.length} sources would be deleted, over budget.maxDeletesPerRun (${job.budget.maxDeletesPerRun}). Re-run with --allow-mass-delete if this is intended.`,
@@ -197,7 +229,13 @@ async function apply(ops: Op[], sink: Sink, report: JobReport): Promise<void> {
     const meta =
       op.kind === 'delete'
         ? undefined
-        : { title: op.video.title, hash: op.video.hash, part: op.part, url: op.video.url, publishedAt: op.video.publishedAt };
+        : {
+            title: op.video.title,
+            hash: op.video.hash,
+            part: op.part,
+            url: op.video.url,
+            publishedAt: op.video.publishedAt,
+          };
     try {
       if (op.kind === 'create') await sink.create(op.videoId, op.name, op.content, meta!);
       else if (op.kind === 'update') await sink.update(op.existing, op.name, op.content, meta!);
@@ -230,4 +268,21 @@ async function apply(ops: Op[], sink: Sink, report: JobReport): Promise<void> {
 function done(report: JobReport, exitCode: ExitCode): JobOutcome {
   report.finishedAt = new Date().toISOString();
   return { report, exitCode };
+}
+
+/** Expand the `exclude` list into a set of video IDs (playlists are listed in full). */
+async function resolveExclusions(job: Job, fetchFn?: FetchFn): Promise<Set<string>> {
+  const out = new Set<string>();
+  for (const entry of job.exclude) {
+    const ref = classifyRef(entry);
+    if (!ref) continue; // rejected by config validation
+    if (ref.kind === 'video') {
+      out.add(ref.id);
+      continue;
+    }
+    const listing = await listPlaylist(ref.id, fetchFn);
+    if (!listing.complete) warnTruncated(entry, listing);
+    for (const id of listing.ids) out.add(id);
+  }
+  return out;
 }

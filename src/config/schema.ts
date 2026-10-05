@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { classifyRef } from '../discover/youtube.js';
 
 const regexString = z.string().refine((s) => {
   try {
@@ -13,6 +14,8 @@ const regexString = z.string().refine((s) => {
 export function toRegExp(s: string): RegExp {
   return s.startsWith('(?i)') ? new RegExp(s.slice(4), 'i') : new RegExp(s);
 }
+
+const refString = z.string().refine((s) => classifyRef(s) !== undefined, 'not a YouTube video or playlist URL/ID');
 
 const sourceSchema = z.union([
   z.object({ channel: z.string().min(2) }).strict(),
@@ -69,6 +72,8 @@ const defaultsSchema = z
     budget: budgetSchema.default({}),
     pricing: pricingSchema.default({}),
     filters: filtersSchema.default({}),
+    /** Videos or playlists to keep out of the agent, by URL or ID. Job entries add to these. */
+    exclude: z.array(refString).default([]),
     sink: z.enum(['rest', 'export']).default('rest'),
     exportDir: z.string().default('out'),
     actorId: z.string().default('codepoetry/youtube-transcript-ai-scraper'),
@@ -107,7 +112,11 @@ const jobSchema = defaultsSchema
       .partial()
       .strict()
       .optional(),
-    pricing: z.object({ transcriptUsd: z.number().nonnegative(), aiMinuteUsd: z.number().nonnegative() }).partial().strict().optional(),
+    pricing: z
+      .object({ transcriptUsd: z.number().nonnegative(), aiMinuteUsd: z.number().nonnegative() })
+      .partial()
+      .strict()
+      .optional(),
     filters: z
       .object({
         titleInclude: z.array(regexString),
@@ -160,6 +169,7 @@ export function resolveJobs(cfg: RawConfig): Job[] {
       budget: { ...d.budget, ...(j.budget ?? {}) },
       pricing: { ...d.pricing, ...(j.pricing ?? {}) },
       filters: { ...d.filters, ...(j.filters ?? {}) },
-    } as Job;
+      exclude: [...d.exclude, ...(j.exclude ?? [])],
+    };
   });
 }

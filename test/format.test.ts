@@ -31,7 +31,11 @@ describe('parseChapters', () => {
 });
 
 describe('toBlocks', () => {
-  const segs = Array.from({ length: 30 }, (_, i) => ({ start: i * 5, end: i * 5 + 5, text: i % 4 === 3 ? `Sentence ${i}.` : `word ${i}` }));
+  const segs = Array.from({ length: 30 }, (_, i) => ({
+    start: i * 5,
+    end: i * 5 + 5,
+    text: i % 4 === 3 ? `Sentence ${i}.` : `word ${i}`,
+  }));
   it('closes blocks at a sentence end after the window', () => {
     const b = toBlocks(segs, 30);
     expect(b.length).toBeGreaterThan(2);

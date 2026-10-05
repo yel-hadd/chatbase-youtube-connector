@@ -7,5 +7,5 @@ jobs:
     sink: export
     exportDir: out
     sources:
-      - channel: "@chatbase_"
+      - channel: '@chatbase_'
     maxVideos: 8

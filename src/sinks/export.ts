@@ -90,7 +90,8 @@ export class ExportSink implements Sink {
   async remove(existing: OwnedSource): Promise<void> {
     await this.load();
     await rm(join(this.dir, existing.sourceId), { force: true });
-    delete this.manifest.entries[key(existing.videoId, existing.part)];
+    const gone = key(existing.videoId, existing.part);
+    this.manifest.entries = Object.fromEntries(Object.entries(this.manifest.entries).filter(([k]) => k !== gone));
     this.removed.push(existing.sourceId);
   }
 

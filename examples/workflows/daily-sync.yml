@@ -4,8 +4,8 @@
 name: Sync YouTube to Chatbase
 on:
   schedule:
-    - cron: '17 6 * * *'   # daily, new videos only (free RSS discovery)
-    - cron: '43 4 * * 0'   # Sunday, full re-check
+    - cron: '17 6 * * *' # daily, new videos only (free RSS discovery)
+    - cron: '43 4 * * 0' # Sunday, full re-check
   workflow_dispatch:
     inputs:
       full: { type: boolean, default: false, description: Full re-check }

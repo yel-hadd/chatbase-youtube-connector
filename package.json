@@ -3,17 +3,39 @@
   "version": "0.1.0",
   "description": "Keep a Chatbase AI agent trained on a YouTube channel, with timestamped answers. Runs on GitHub Actions or any VPS.",
   "type": "module",
-  "bin": { "chatbase-youtube-sync": "dist/cli.js" },
+  "bin": {
+    "chatbase-youtube-sync": "dist/cli.js"
+  },
   "main": "dist/index.js",
-  "files": ["dist", "schema", "README.md", "LICENSE"],
-  "engines": { "node": ">=20" },
+  "files": [
+    "dist",
+    "schema",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "dev": "tsx src/cli.ts"
+    "dev": "tsx src/cli.ts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "coverage": "vitest run --coverage",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run coverage"
   },
-  "keywords": ["chatbase", "youtube", "transcripts", "rag", "github-actions", "apify", "ai-agent"],
+  "keywords": [
+    "chatbase",
+    "youtube",
+    "transcripts",
+    "rag",
+    "github-actions",
+    "apify",
+    "ai-agent"
+  ],
   "license": "MIT",
   "dependencies": {
     "commander": "^12.1.0",
@@ -22,9 +44,15 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.9",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
+    "typescript-eslint": "^8.71.0",
     "vitest": "^2.1.0"
   }
 }

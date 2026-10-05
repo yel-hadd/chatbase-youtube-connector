@@ -39,7 +39,7 @@ interface ActorItem {
   language?: string;
   is_auto_generated?: boolean;
   is_ai_generated?: boolean;
-  transcript_json?: Array<{ start: number; end: number; text: string }>;
+  transcript_json?: { start: number; end: number; text: string }[];
   transcript_llm?: string;
   transcript_text?: string;
 }

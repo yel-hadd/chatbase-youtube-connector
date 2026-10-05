@@ -1,7 +1,11 @@
 # For Chatbase Free/Hobby (no API access): build upload-ready transcript files
 # weekly and commit them to this repo. Then upload the files listed in
 # out/<job>/CHANGES.txt via Sources -> Files in the Chatbase dashboard.
-# Committing (rather than caching) keeps the state safe between weekly runs.
+# CHANGES.txt only covers the latest run; its git history keeps the older ones.
+# Committing (rather than caching) keeps the state (out/<job>/manifest.json and
+# the skip cache) safe between weekly runs.
+# Copy to .github/workflows/ next to chatbase-youtube.yaml. Needs: secret APIFY_TOKEN.
+# The config's jobs need `sink: export` and no agentId line.
 name: Export YouTube transcripts for Chatbase
 on:
   schedule:

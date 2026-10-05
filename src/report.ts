@@ -1,3 +1,5 @@
+// The run report: report.json (machine-readable, schemaVersion bumps on breaking changes)
+// and the Markdown summary printed to stdout and to the GitHub Actions step summary.
 import { appendFile, writeFile } from 'node:fs/promises';
 
 export const REPORT_SCHEMA_VERSION = 1;
@@ -68,13 +70,17 @@ export function renderSummary(run: RunReport): string {
     if (j.aborted) lines.push(`**Aborted:** ${j.aborted}`);
     lines.push(
       '',
-      '| Created | Updated | Deleted | Unchanged | Excluded | Failed | Planned |',
-      '|---|---|---|---|---|---|---|',
-      `| ${c.created} | ${c.updated} | ${c.deleted} | ${c.unchanged} | ${c.excluded} | ${c.failed} | ${c.planned} |`,
+      '| Created | Updated | Deleted | Unchanged | Skipped | Excluded | Failed | Planned |',
+      '|---|---|---|---|---|---|---|---|',
+      `| ${c.created} | ${c.updated} | ${c.deleted} | ${c.unchanged} | ${c.skipped} | ${c.excluded} | ${c.failed} | ${c.planned} |`,
       '',
       `Spend: up to ${usd(j.spend.estimatedMaxUsd)} estimated${j.spend.actualUsd !== undefined ? `, ${usd(j.spend.actualUsd)} Apify-reported run usage` : ''}.`,
     );
-    const changed = j.videos.filter((v) => ['created', 'updated', 'deleted', 'failed', 'planned'].includes(v.action));
+    const changed = j.videos.filter(
+      (v) =>
+        ['created', 'updated', 'deleted', 'failed', 'planned'].includes(v.action) ||
+        (v.action === 'skipped' && v.detail === 'storage limit reached'),
+    );
     if (changed.length) {
       lines.push('', '| Video | Action | Detail |', '|---|---|---|');
       for (const v of changed.slice(0, 50)) {

@@ -1,3 +1,5 @@
+// Reads the YAML config, substitutes ${VAR} from the environment and validates it.
+// Every failure here is a UserError with exit code 2 and a message that names the problem.
 import { readFile } from 'node:fs/promises';
 import { parse } from 'yaml';
 import { configSchema, resolveJobs, type Job } from './schema.js';
@@ -17,14 +19,25 @@ export function interpolateEnv(text: string, env: NodeJS.ProcessEnv = process.en
   });
 }
 
+/** Interpolate ${VAR} in every string value (never in comments or keys). */
+function interpolateValues(v: unknown, env: NodeJS.ProcessEnv): unknown {
+  if (typeof v === 'string') return interpolateEnv(v, env);
+  if (Array.isArray(v)) return v.map((x) => interpolateValues(x, env));
+  if (v && typeof v === 'object') {
+    return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, interpolateValues(x, env)]));
+  }
+  return v;
+}
+
 export function parseConfig(text: string, env: NodeJS.ProcessEnv = process.env): Job[] {
-  let raw: unknown;
+  let parsed: unknown;
   try {
-    raw = parse(interpolateEnv(text, env));
+    parsed = parse(text);
   } catch (e) {
-    if (e instanceof UserError) throw e;
     throw new UserError(`config is not valid YAML: ${(e as Error).message}`, ExitCode.ConfigInvalid);
   }
+  // After parsing, so a commented-out ${VAR} is ignored instead of failing the run.
+  const raw = interpolateValues(parsed, env);
   const res = configSchema.safeParse(raw);
   if (!res.success) {
     const msg = res.error.issues.map((i) => `  - ${i.path.join('.') || '(root)'}: ${i.message}`).join('\n');

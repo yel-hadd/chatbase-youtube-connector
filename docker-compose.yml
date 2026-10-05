@@ -1,14 +1,17 @@
+# Daily sync + weekly full re-check in one long-running container.
+# Next to this file you need: chatbase-youtube.yaml, a .env with your keys, and a
+# ./data folder owned by uid 1000 (`sudo chown 1000:1000 data`). See the README.
 services:
   chatbase-youtube-sync:
     image: ghcr.io/yel-hadd/chatbase-youtube-connector:latest
     restart: unless-stopped
-    env_file: .env # APIFY_TOKEN, CHATBASE_API_KEY, CHATBASE_AGENT_ID, optional HEALTHCHECK_URL
+    env_file: .env # APIFY_TOKEN, CHATBASE_API_KEY, CHATBASE_AGENT_ID; optional HEALTHCHECK_URL, REPORT_WEBHOOK_URL
     environment:
-      SCHEDULE: '17 6 * * *' # daily: new videos
+      SCHEDULE: '17 6 * * *' # daily: new videos (cron syntax, UTC)
       FULL_SCHEDULE: '43 4 * * 0' # weekly: full re-check
     volumes:
       - ./chatbase-youtube.yaml:/config/chatbase-youtube.yaml:ro
-      - ./data:/data # report.json and export-mode files
+      - ./data:/data # report.json, the skip cache and export-mode files
     read_only: true
     tmpfs: [/tmp]
     security_opt: [no-new-privileges:true]

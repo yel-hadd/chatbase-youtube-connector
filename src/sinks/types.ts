@@ -1,3 +1,5 @@
+// The sink interface: where formatted transcripts are written. Add a new destination by
+// implementing Sink and choosing it in cli.ts (makeSink).
 import type { OwnedSource } from '../types.js';
 
 /** Where formatted transcripts go: Chatbase (REST) or files on disk (export). */

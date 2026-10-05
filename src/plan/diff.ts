@@ -1,3 +1,5 @@
+// Pure planning: compares freshly formatted videos with the sources we already own and
+// returns the operations to apply. No I/O, so every sync decision is unit-testable.
 import type { OwnedSource } from '../types.js';
 import { encodeName } from './naming.js';
 

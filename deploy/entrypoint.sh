@@ -27,6 +27,8 @@ run_sync() {
 }
 
 if [ "${1:-}" = "--once" ]; then shift; run_sync "$@"; exit $?; fi
+# Internal: what the crontab below calls. It exits 0 even when the sync failed, since the
+# outcome has already gone to the logs, HEALTHCHECK_URL and REPORT_WEBHOOK_URL.
 if [ "${1:-}" = "--run-sync" ]; then shift; run_sync "$@"; exit 0; fi
 if [ $# -gt 0 ]; then exec $CLI "$@"; fi
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// Command-line entry point (`chatbase-youtube-sync`). Parses flags, builds the provider
+// and sink for each job, runs them one after another and turns the worst outcome into the
+// process exit code. All sync logic lives in sync.ts; this file only wires things up.
 import { Command } from 'commander';
 import { writeFile, access } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -23,6 +26,7 @@ function makeSink(job: Job): Sink {
   if (!env('CHATBASE_API_KEY')) {
     throw new UserError('CHATBASE_API_KEY is not set (needed for sink: rest)', ExitCode.AuthOrPlan);
   }
+  // The schema requires agentId whenever sink is rest.
   return new ChatbaseRestSink(env('CHATBASE_API_KEY'), job.agentId!);
 }
 

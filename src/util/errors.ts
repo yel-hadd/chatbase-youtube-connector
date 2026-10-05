@@ -1,3 +1,5 @@
+// Exit codes (part of the public interface: scripts and the README rely on them) and the
+// error types that carry them.
 export enum ExitCode {
   Ok = 0,
   Unexpected = 1,

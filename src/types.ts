@@ -1,3 +1,4 @@
+// Shared data types and YouTube video ID / URL helpers.
 export interface VideoRef {
   id: string;
   title?: string;

@@ -1,3 +1,6 @@
+// Free video discovery on YouTube, with no API key: channel handles to IDs, the channel RSS
+// feed (newest 15 videos), and playlist listings. Paid listing of a whole channel goes
+// through the Apify Actor instead (see sourceListingUrl).
 import { XMLParser } from 'fast-xml-parser';
 import { HttpError, UserError, ExitCode } from '../util/errors.js';
 import { withRetry, type FetchFn } from '../util/http.js';

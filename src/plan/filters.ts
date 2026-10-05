@@ -1,3 +1,5 @@
+// The per-video rules from the config (Shorts, duration, date, title regexes). Fields that
+// are not known yet (e.g. duration before transcription) pass, and are checked again later.
 import { toRegExp, type Job } from '../config/schema.js';
 
 export interface Filterable {

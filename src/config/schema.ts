@@ -1,3 +1,6 @@
+// The config file's schema and defaults (zod). This is the single source of truth for
+// every config key and default value; docs/configuration.md documents it. Everything is
+// .strict() so a typo is an error, not a silently ignored key.
 import { z } from 'zod';
 import { classifyRef } from '../discover/youtube.js';
 

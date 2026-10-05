@@ -1,3 +1,4 @@
+# Starts chatbase-youtube-sync.service daily at 06:17 (server time). See the .service file.
 [Unit]
 Description=Daily Chatbase YouTube sync
 

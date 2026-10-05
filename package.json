@@ -1,6 +1,6 @@
 {
   "name": "chatbase-youtube-sync",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Keep a Chatbase AI agent trained on a YouTube channel, with timestamped answers. Runs on GitHub Actions or any VPS.",
   "type": "module",
   "bin": {

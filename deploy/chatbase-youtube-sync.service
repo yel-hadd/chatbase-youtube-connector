@@ -1,6 +1,10 @@
-# systemd alternative to the in-container scheduler.
+# systemd alternative to the in-container scheduler: runs one sync and exits.
+# Expects /opt/chatbase-youtube-sync/ to hold .env, chatbase-youtube.yaml and a
+# data/ folder owned by uid 1000 (`sudo chown 1000:1000 data`).
 # Install: copy this file and chatbase-youtube-sync.timer to /etc/systemd/system/,
 # then: systemctl enable --now chatbase-youtube-sync.timer
+# This runs the daily sync only; for a weekly full re-check, add a second
+# service + timer pair that passes `--once --full`.
 [Unit]
 Description=Sync YouTube videos into a Chatbase agent
 Wants=network-online.target

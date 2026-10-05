@@ -74,6 +74,17 @@ export function mapItem(it: ActorItem): Transcript | TranscriptFailure | undefin
   };
 }
 
+/** Turn Apify auth failures into a clear, non-retryable user error (exit 5). */
+function translateAuth(e: unknown): unknown {
+  if (e instanceof HttpError && (e.status === 401 || e.status === 403)) {
+    return new UserError(
+      `Apify rejected the token (HTTP ${e.status}). Check APIFY_TOKEN; it needs access to run Actors.`,
+      ExitCode.AuthOrPlan,
+    );
+  }
+  return e;
+}
+
 export class ApifyTranscriptProvider {
   constructor(
     private readonly token: string,
@@ -81,6 +92,7 @@ export class ApifyTranscriptProvider {
     private readonly build?: string,
     private readonly fetchFn: FetchFn = fetch,
     private readonly pollMs = 5_000,
+    // Stop waiting after an hour. The Apify run itself is not aborted; its ID is in the log.
     private readonly timeoutMs = 60 * 60_000,
   ) {}
 
@@ -95,6 +107,14 @@ export class ApifyTranscriptProvider {
 
   /** Check the token and the Actor are reachable. Used by `doctor`. */
   async check(): Promise<{ user: string; actor: string }> {
+    try {
+      return await this.checkInner();
+    } catch (e) {
+      throw translateAuth(e);
+    }
+  }
+
+  private async checkInner(): Promise<{ user: string; actor: string }> {
     const me = await readJson<{ data: { username: string } }>(
       await this.fetchFn(`${API}/users/me`, { headers: this.headers() }),
       'Apify users/me',
@@ -107,9 +127,18 @@ export class ApifyTranscriptProvider {
   }
 
   async transcribe(urls: string[], opts: TranscribeOptions): Promise<TranscribeResult> {
+    try {
+      return await this.transcribeInner(urls, opts);
+    } catch (e) {
+      throw translateAuth(e);
+    }
+  }
+
+  private async transcribeInner(urls: string[], opts: TranscribeOptions): Promise<TranscribeResult> {
     if (urls.length === 0) return { transcripts: [], failures: [] };
     const input = {
       startUrls: urls.map((url) => ({ url })),
+      // Matters only for channel/playlist URLs.
       maxResults: opts.maxResults ?? 10,
       languages: opts.languages,
       machineTranslateCaptions: opts.machineTranslate,

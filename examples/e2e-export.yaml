@@ -1,4 +1,7 @@
 # Live smoke test: Chatbase's own channel, export sink, at most 3 videos (about $0.003).
+# Needs no Chatbase account. Free preview (RSS only, no Apify token needed):
+#   node dist/cli.js -c examples/e2e-export.yaml sync --dry-run --pretty
+# Without --dry-run it needs APIFY_TOKEN and writes the files to out/chatbase-channel/.
 version: 1
 defaults:
   budget: { maxUsdPerRun: 0.05, maxNewVideosPerRun: 3 }

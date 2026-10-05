@@ -252,7 +252,7 @@ describe('report', () => {
       ],
     };
     const md = renderSummary(r);
-    expect(md).toContain('| 1 | 0 | 0 | 0 | 0 | 0 | 0 |');
+    expect(md).toContain('| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |');
     expect(md).toContain('$0.0010');
     expect(md).toContain('[A / B](https://youtu.be/tM3wpoieYTc)');
     await writeReports(r, join(dir, 'report.json'));

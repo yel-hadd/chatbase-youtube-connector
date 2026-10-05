@@ -49,6 +49,10 @@ describe('config', () => {
     expect(job!.budget.maxUsdPerRun).toBe(5);
     expect(job!.sink).toBe('rest');
   });
+  it('ignores ${VAR} inside YAML comments', () => {
+    const [job] = parseConfig(base.replace('    sources:', '    # agentId: ${NOT_SET}\n    sources:'), { AGENT: 'a' });
+    expect(job!.agentId).toBe('a');
+  });
   it('fails loudly on a missing env var', () => {
     expect(() => interpolateEnv('${NOPE}', {})).toThrow(UserError);
   });

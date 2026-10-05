@@ -1,6 +1,9 @@
-# .github/workflows/chatbase-youtube.yml
-# Adds new videos every day; re-checks the whole channel every Sunday
-# (picks up edited captions and, with prune: true, deleted videos).
+# Copy to .github/workflows/chatbase-youtube.yml in the repository that holds chatbase-youtube.yaml.
+# Adds new videos every day; re-checks every video every Sunday
+# (adds missing ones, picks up edited captions and, with prune: true, removes deleted videos).
+# Needs: secrets APIFY_TOKEN and CHATBASE_API_KEY, variable CHATBASE_AGENT_ID
+# (Settings -> Secrets and variables -> Actions). Change the cron times if you like (UTC);
+# if you change the Sunday one, change it in the `full:` expression below too.
 name: Sync YouTube to Chatbase
 on:
   schedule:

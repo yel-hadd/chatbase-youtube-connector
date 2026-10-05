@@ -26,7 +26,7 @@ interface StateFile {
   skipped: Record<string, Entry>;
 }
 
-/** The settings that decide whether a video is usable. */
+/** The settings that decide whether a video is usable. Budget and pricing are left out on purpose: they change cost, not the verdict. */
 export function skipFingerprint(job: Job): string {
   const relevant = {
     languages: job.languages,

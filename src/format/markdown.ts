@@ -1,3 +1,6 @@
+// Turns a transcript into the Markdown text stored in Chatbase: a header the agent can
+// cite, then sections of about `segmentSeconds` with a timestamped [watch] link each.
+// The output must be deterministic, because its hash decides whether a source is rewritten.
 import type { Segment, Transcript } from '../types.js';
 
 /**

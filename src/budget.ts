@@ -1,3 +1,6 @@
+// Worst-case spend estimate, checked before every paid Apify run. The real cost (how many
+// videos lack captions, how many AI minutes) is only known after the run, so the guard
+// assumes the worst: every transcript charged and the whole AI-minute cap used.
 import type { Job } from './config/schema.js';
 
 export interface SpendEstimate {

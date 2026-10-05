@@ -68,6 +68,12 @@ describe('ApifyTranscriptProvider', () => {
     await expect(p.transcribe(['https://youtu.be/tM3wpoieYTc'], opts)).rejects.toThrow(/FAILED/);
   });
 
+  it('reports a rejected token as an auth problem (exit 5)', async () => {
+    const { fetchFn } = scripted([() => json({ error: { type: 'token-not-valid' } }, 401)]);
+    const p = new ApifyTranscriptProvider('apify_api_BADTOKEN1234', 'a/b', undefined, fetchFn, 0);
+    await expect(p.transcribe(['https://youtu.be/tM3wpoieYTc'], opts)).rejects.toMatchObject({ exitCode: 5 });
+  });
+
   it('does nothing for an empty batch', async () => {
     const p = new ApifyTranscriptProvider('', 'a/b');
     expect(await p.transcribe([], opts)).toEqual({ transcripts: [], failures: [] });

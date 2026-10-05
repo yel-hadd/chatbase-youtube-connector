@@ -1,4 +1,8 @@
-# Full reference: docs/configuration.md
+# Starter config for one Chatbase agent fed from one YouTube channel.
+# Change: the channel under `sources:` (and add playlists or videos if you like).
+# Set CHATBASE_AGENT_ID in the environment, or replace the agentId value with the ID itself.
+# On Chatbase Free/Hobby: add `sink: export` to the job and delete the agentId line.
+# Every option: docs/configuration.md. Check this file with: chatbase-youtube-sync validate
 version: 1
 defaults:
   languages: [en] # caption languages, in order of preference
@@ -15,7 +19,7 @@ defaults:
     maxNewVideosPerRun: 200
     maxDeletesPerRun: 10
     # storageLimitMb: 20     # your Chatbase plan's training limit (Standard = 20)
-  prune: false # delete sources for videos removed from YouTube (full runs)
+  prune: false # true: remove videos deleted from YouTube (full runs) or excluded in config
 
 jobs:
   - name: academy

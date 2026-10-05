@@ -1,3 +1,8 @@
+// The sync engine for one job: discover videos, decide what to pay for, transcribe,
+// format, diff against what the sink already holds, then apply the changes.
+// Order matters for safety: every check that can stop a run (exclusion delete cap, spend
+// estimate) happens before the first paid Apify call, and a cap hit after paid work
+// holds back only the risky part (deletions) instead of throwing the work away.
 import type { Job, Source } from './config/schema.js';
 import { classifyRef, discoverRecent, listPlaylist, sourceListingUrl, warnTruncated } from './discover/youtube.js';
 import { formatTranscript } from './format/markdown.js';
@@ -108,6 +113,8 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
         }
         fresh.push(v);
       }
+      // Playlist and single-video refs carry no title or duration yet; they pass the rules
+      // above and are checked again once the transcript is in (see below).
       const batch = fresh.slice(0, job.budget.maxNewVideosPerRun);
       const est = estimateSpend(job, batch.length);
       report.spend.estimatedMaxUsd = est.maxUsd;
@@ -190,7 +197,10 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const sentToAi = new Set(needAi.map((f) => f.id));
       for (const f of failures) if (!sentToAi.has(f.id)) recordFailure(report, skips, f);
 
-      // Excluded videos are removed under their own reason, so they never count as "gone".
+      // Prune safety: "gone" means "not in a listing we know is complete". If any listing
+      // failed or hit maxVideos, a missing video may simply not have been listed, so no
+      // video is treated as deleted from YouTube this run. Excluded videos are removed under
+      // their own reason, so they never count as "gone".
       if (job.prune && !truncated) goneIds = [...ownedIds].filter((id) => !seen.has(id) && !excluded.has(id));
     }
 

@@ -1,3 +1,5 @@
+// Small HTTP helpers shared by every client: retry with backoff, JSON error parsing and a
+// rate limiter. Built on global fetch, so there are no HTTP dependencies.
 import { HttpError } from './errors.js';
 import { log } from './log.js';
 
@@ -69,8 +71,9 @@ export async function readJson<T>(res: Response, context: string): Promise<T> {
 }
 
 /**
- * Sliding-window token bucket. Chatbase allows 100 requests per 10 s per key;
- * we default to 80 to leave headroom for other clients on the same key.
+ * Sliding-window rate limiter: at most `max` calls in any `windowMs`. Chatbase allows
+ * 100 requests per 10 s per key; the REST sink uses 80 to leave headroom for other
+ * clients sharing the key.
  */
 export class RateLimiter {
   private stamps: number[] = [];

@@ -38,7 +38,9 @@ export class ChatbaseRestSink implements Sink {
     opts: { requestsPer10s?: number; trainingWaitMs?: number; pollMs?: number } = {},
   ) {
     if (!apiKey) throw new UserError('CHATBASE_API_KEY is not set', ExitCode.AuthOrPlan);
+    // 80 of Chatbase's 100 requests per 10 s, leaving room for other clients on the same key.
     this.limiter = new RateLimiter(opts.requestsPer10s ?? 80, 10_000);
+    // How long an update waits for a source that is still training (409 SOURCE_IS_TRAINING).
     this.trainingWaitMs = opts.trainingWaitMs ?? 120_000;
     this.pollMs = opts.pollMs ?? 3_000;
   }

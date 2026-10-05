@@ -1,6 +1,7 @@
 // Export sink for Chatbase plans without API access (Free, Hobby).
-// Writes one .txt per video, a manifest (the sink's state) and CHANGES.txt (what to upload or delete). Upload the files with "Add files"
-// in the Chatbase dashboard; re-runs only touch files whose content changed.
+// Writes one .txt per video, manifest.json (this sink's state, the equivalent of the source
+// names in the REST sink) and CHANGES.txt (what to upload or delete, for this run only).
+// The user uploads the files under Sources -> Files; re-runs only touch changed files.
 
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

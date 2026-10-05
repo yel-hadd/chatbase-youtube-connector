@@ -81,16 +81,25 @@ Rules apply to new videos. A video already in the agent is never deleted because
 
 A full run never deletes "missing" videos when the listing hit `maxVideos`. In that case the listing may just be truncated, so the run skips pruning.
 
+## State between runs
+
+| Key                       | Default             | Effect                                                                                                                           |
+| ------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `stateDir`                | `.chatbase-youtube` | Holds the skip cache (one file per job): videos that had no captions or were too short, so they are not paid for again every run |
+| `recheckSkippedAfterDays` | `30`                | Re-check skipped videos after this long (captions may have been added)                                                           |
+
+The skip cache is an optimisation. Losing it only means skipped videos are checked once more. Keep the folder between runs: the Docker image stores it in `/data`, and the GitHub Actions example caches it.
+
 ## Safety: `budget` and `pricing`
 
-| Key                         | Default | Effect                                                               |
-| --------------------------- | ------- | -------------------------------------------------------------------- |
-| `budget.maxUsdPerRun`       | `5`     | Abort before spending if the worst case is higher (exit code 3)      |
-| `budget.maxNewVideosPerRun` | `200`   | New videos per incremental run; the rest wait for the next run       |
-| `budget.maxDeletesPerRun`   | `10`    | Abort if more sources would be removed, unless `--allow-mass-delete` |
-| `budget.storageLimitMb`     | none    | Your Chatbase plan's training limit. Abort before going over         |
-| `pricing.transcriptUsd`     | `0.001` | Price per transcript, used for the estimate                          |
-| `pricing.aiMinuteUsd`       | `0.012` | Price per AI minute, used for the estimate                           |
+| Key                         | Default | Effect                                                                                                                                                                               |
+| --------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `budget.maxUsdPerRun`       | `5`     | Abort before spending if the worst case is higher (exit code 3)                                                                                                                      |
+| `budget.maxNewVideosPerRun` | `200`   | New videos per incremental run; the rest wait for the next run                                                                                                                       |
+| `budget.maxDeletesPerRun`   | `10`    | Removals above this are held back unless `--allow-mass-delete`. Exclusions are checked before any spend; YouTube deletions after the listing, when the rest of the run still applies |
+| `budget.storageLimitMb`     | none    | Your Chatbase plan's training limit. The run adds videos until the next would go over, then stops (exit 3)                                                                           |
+| `pricing.transcriptUsd`     | `0.001` | Price per transcript, used for the estimate                                                                                                                                          |
+| `pricing.aiMinuteUsd`       | `0.012` | Price per AI minute, used for the estimate                                                                                                                                           |
 
 ## Environment variables
 

@@ -20,9 +20,6 @@ inputs:
   allow-mass-delete:
     description: Permit deletions above budget.maxDeletesPerRun
     default: 'false'
-  version:
-    description: npm version of chatbase-youtube-sync to run
-    default: '0.1.0'
 outputs:
   report:
     description: Path to the JSON run report
@@ -33,15 +30,20 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: 22
+    # Build from the action's own source at the ref you pinned (e.g. @v1), so the
+    # action never depends on a separately published package.
+    - shell: bash
+      working-directory: ${{ github.action_path }}
+      run: npm ci --no-audit --no-fund && npm run build
     - id: run
       shell: bash
       env:
+        CLI: ${{ github.action_path }}/dist/cli.js
         INPUT_CONFIG: ${{ inputs.config }}
         INPUT_FULL: ${{ inputs.full }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
         INPUT_JOB: ${{ inputs.job }}
         INPUT_MASS_DELETE: ${{ inputs.allow-mass-delete }}
-        INPUT_VERSION: ${{ inputs.version }}
       run: |
         args=(-c "$INPUT_CONFIG" sync --report report.json)
         [ "$INPUT_FULL" = "true" ] && args+=(--full)
@@ -49,4 +51,4 @@ runs:
         [ "$INPUT_MASS_DELETE" = "true" ] && args+=(--allow-mass-delete)
         [ -n "$INPUT_JOB" ] && args+=(--job "$INPUT_JOB")
         echo "report=report.json" >> "$GITHUB_OUTPUT"
-        npx --yes "chatbase-youtube-sync@${INPUT_VERSION}" "${args[@]}"
+        node "$CLI" "${args[@]}"

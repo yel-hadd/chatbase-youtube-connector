@@ -22,6 +22,8 @@ export interface JobReport {
   videos: VideoResult[];
   errors: string[];
   aborted?: string;
+  /** A budget, storage or delete cap stopped part of the run. */
+  capHit?: boolean;
 }
 
 export interface RunReport {

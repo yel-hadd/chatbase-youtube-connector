@@ -1,5 +1,5 @@
 // Export sink for Chatbase plans without API access (Free, Hobby).
-// Writes one .txt per video plus a manifest. Upload the files with "Add files"
+// Writes one .txt per video, a manifest (the sink's state) and CHANGES.txt (what to upload or delete). Upload the files with "Add files"
 // in the Chatbase dashboard; re-runs only touch files whose content changed.
 
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -15,7 +15,6 @@ interface ManifestEntry {
   url: string;
   file: string;
   bytes: number;
-  publishedAt?: string;
 }
 
 interface Manifest {
@@ -29,8 +28,8 @@ export class ExportSink implements Sink {
   readonly kind = 'export' as const;
   private manifest: Manifest = { version: 1, entries: {} };
   private loaded = false;
-  readonly changed: string[] = [];
-  readonly removed: string[] = [];
+  private readonly changed: string[] = [];
+  private readonly removed: string[] = [];
 
   constructor(private readonly dir: string) {}
 
@@ -72,7 +71,6 @@ export class ExportSink implements Sink {
       url: meta.url,
       file,
       bytes: Buffer.byteLength(content, 'utf8'),
-      publishedAt: meta.publishedAt,
     };
     this.changed.push(file);
   }
@@ -103,12 +101,6 @@ export class ExportSink implements Sink {
   async finish(): Promise<void> {
     await this.load();
     await writeFile(this.manifestPath(), JSON.stringify(this.manifest, null, 2) + '\n', 'utf8');
-    const rows = ['file,video_id,part,title,url,published_at'];
-    for (const e of Object.values(this.manifest.entries).sort((a, b) => a.file.localeCompare(b.file))) {
-      const q = (s: string | undefined): string => `"${(s ?? '').replace(/"/g, '""')}"`;
-      rows.push([e.file, e.videoId, e.part, q(e.title), e.url, e.publishedAt ?? ''].join(','));
-    }
-    await writeFile(join(this.dir, 'index.csv'), rows.join('\n') + '\n', 'utf8');
     await writeFile(
       join(this.dir, 'CHANGES.txt'),
       [

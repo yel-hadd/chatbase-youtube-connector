@@ -9,6 +9,7 @@ import { ExportSink } from '../src/sinks/export.js';
 import { mapItem, type TranscribeOptions } from '../src/providers/apify.js';
 import type { Transcript } from '../src/types.js';
 import { ExitCode } from '../src/util/errors.js';
+import { SkipCache } from '../src/state.js';
 
 const items = JSON.parse(readFileSync(new URL('./fixtures/actor-items.json', import.meta.url), 'utf8')) as Parameters<
   typeof mapItem
@@ -51,12 +52,13 @@ beforeEach(async () => {
 });
 
 describe('syncJob (export sink, end to end with real fixtures)', () => {
-  it('transcribes new videos, writes files, and is idempotent on re-run', async () => {
+  it('transcribes new videos, writes files, and spends nothing on a re-run', async () => {
     const [job] = parseConfig(cfg(), {});
     const provider = new FakeProvider();
+    const statePath = join(dir, 'state', 'chatbase.json');
     const first = await syncJob(
       job!,
-      { provider, sink: new ExportSink(dir), fetchFn: feedFetch },
+      { provider, sink: new ExportSink(dir), fetchFn: feedFetch, skipCache: new SkipCache(statePath, 30) },
       { full: false, dryRun: false, allowMassDelete: false },
     );
     expect(first.exitCode).toBe(ExitCode.Ok);
@@ -65,20 +67,22 @@ describe('syncJob (export sink, end to end with real fixtures)', () => {
     expect(first.report.counts.excluded).toBe(1);
     const files = await readdir(dir);
     expect(files).toEqual(
-      expect.arrayContaining(['tM3wpoieYTc.txt', 'R3omXx5vPqI.txt', 'manifest.json', 'index.csv', 'CHANGES.txt']),
+      expect.arrayContaining(['tM3wpoieYTc.txt', 'R3omXx5vPqI.txt', 'manifest.json', 'CHANGES.txt']),
     );
     const doc = await readFile(join(dir, 'tM3wpoieYTc.txt'), 'utf8');
     expect(doc).toContain('[watch](https://youtu.be/tM3wpoieYTc?t=0)');
 
-    // Second run: the two owned videos are not re-transcribed; nothing is written.
+    // Second run: owned videos are skipped, and the 12 caption-less videos are in the
+    // skip cache, so the Actor is not called at all.
     const provider2 = new FakeProvider();
     const second = await syncJob(
       job!,
-      { provider: provider2, sink: new ExportSink(dir), fetchFn: feedFetch },
+      { provider: provider2, sink: new ExportSink(dir), fetchFn: feedFetch, skipCache: new SkipCache(statePath, 30) },
       { full: false, dryRun: false, allowMassDelete: false },
     );
     expect(second.report.counts.created).toBe(0);
-    expect(provider2.calls[0]!.urls.some((u) => u.includes('tM3wpoieYTc'))).toBe(false);
+    expect(provider2.calls).toHaveLength(0);
+    expect(second.report.spend.estimatedMaxUsd).toBe(0);
   });
 
   it('dry run spends nothing and writes nothing', async () => {

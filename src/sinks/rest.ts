@@ -128,7 +128,7 @@ export class ChatbaseRestSink implements Sink {
     } catch (e) {
       if (!isRetryable(e)) throw e;
       if (await this.existsByName(name)) return;
-      await this.call('create source (retry)', this.base(), { method: 'POST', body });
+      await this.call('create source (retry)', this.base(), { method: 'POST', body }, isRateLimited);
     }
   }
 

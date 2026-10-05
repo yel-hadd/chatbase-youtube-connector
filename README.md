@@ -8,7 +8,7 @@ Keep a [Chatbase](https://link.chatbase.co/yassine-el-haddad) AI agent trained o
 Chatbase can train on files, websites, text, Q&A, Notion and tickets, but not YouTube. This connector fills that gap. It runs as a **scheduled GitHub Action** or a **Docker container on any VPS**. There is no server to host and no database.
 
 - **Timestamped knowledge.** Every video becomes one Chatbase source, split into sections of about one minute, each with a `?t=` link. Chapters from the video description become section headings.
-- **Incremental and cheap.** New videos are discovered through YouTube's free RSS feed, so a day with no uploads costs $0. Transcripts come from the [YouTube Transcript Scraper Pro](https://apify.com/codepoetry/youtube-transcript-ai-scraper?fpr=use-apify) Actor on Apify: about $1 per 1,000 videos, with optional AI speech-to-text (≈1¢/min) for videos without captions.
+- **Incremental and cheap.** New videos are found for free (YouTube's RSS feed for channels, the playlist page for playlists). Videos without captions or too short to keep are remembered in a small skip cache, so a day with no uploads costs $0. Transcripts come from the [YouTube Transcript Scraper Pro](https://apify.com/codepoetry/youtube-transcript-ai-scraper?fpr=use-apify) Actor on Apify: about $1 per 1,000 videos, with optional AI speech-to-text (≈1¢/min) for videos without captions.
 - **Stateless and idempotent.** Sync state lives in the Chatbase source names (`YT·<videoId>·<hash>·<title>`). A re-run with nothing new makes zero writes. Runners can be thrown away.
 - **Safe by default.**
   - A budget guard aborts before any spend that would exceed your cap.
@@ -23,10 +23,10 @@ Chatbase can train on files, websites, text, Q&A, Notion and tickets, but not Yo
 YouTube RSS / channel listing ─► Apify transcript Actor ─► format (timestamped Markdown) ─► diff vs Chatbase ─► create / update / delete text sources
 ```
 
-| Run                    | Discovery                                      | What it does                                                                                  |
-| ---------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `sync` (daily)         | RSS feed, free, newest 15 videos per source    | Transcribes and adds videos you don't have yet                                                |
-| `sync --full` (weekly) | Full channel or playlist listing via the Actor | Also updates changed transcripts and, with `prune: true`, removes videos deleted from YouTube |
+| Run                    | Discovery                                                     | What it does                                                                                  |
+| ---------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `sync` (daily)         | Free: channel RSS (newest 15), playlists in full              | Transcribes and adds videos you don't have yet                                                |
+| `sync --full` (weekly) | Every upload (incl. Shorts and live recordings) via the Actor | Also updates changed transcripts and, with `prune: true`, removes videos deleted from YouTube |
 
 ## Choose exactly which videos go in
 
@@ -69,7 +69,8 @@ Every option is documented in [docs/configuration.md](docs/configuration.md).
 ## Quick start: VPS (Docker)
 
 ```bash
-mkdir chatbase-youtube && cd chatbase-youtube
+mkdir -p chatbase-youtube/data && cd chatbase-youtube
+sudo chown 1000:1000 data   # the container runs as an unprivileged user (uid 1000)
 curl -O https://raw.githubusercontent.com/use-app/chatbase-youtube-connector/main/docker-compose.yml
 curl -o chatbase-youtube.yaml https://raw.githubusercontent.com/use-app/chatbase-youtube-connector/main/examples/chatbase-youtube.yaml
 printf 'APIFY_TOKEN=...\nCHATBASE_API_KEY=...\nCHATBASE_AGENT_ID=...\n' > .env && chmod 600 .env
@@ -94,8 +95,9 @@ npx chatbase-youtube-sync validate             # print the resolved config
 | Exit code | Meaning                                                                        |
 | --------- | ------------------------------------------------------------------------------ |
 | 0         | Success                                                                        |
+| 1         | Unexpected error (e.g. an Apify run failed or timed out)                       |
 | 2         | Config invalid                                                                 |
-| 3         | Budget, storage or delete cap would be exceeded (nothing was spent or written) |
+| 3         | A budget, storage or delete cap stopped the run or part of it (see the report) |
 | 4         | Partial failure (some videos failed; the rest are synced)                      |
 | 5         | Auth or plan problem (e.g. Chatbase API needs Standard)                        |
 
@@ -115,7 +117,7 @@ Add this to your agent's instructions in Chatbase:
 
 | Scenario                                                | Apify cost                                   |
 | ------------------------------------------------------- | -------------------------------------------- |
-| Daily run, no new videos                                | $0 (RSS only)                                |
+| Daily run, no new videos                                | $0 (free discovery, skip cache)              |
 | 1 new video with captions                               | ≈ $0.001                                     |
 | Backfill 300 videos × 20 min, 20% without captions (AI) | 300 × $0.001 + 60 × 20 × $0.012 ≈ **$14.70** |
 

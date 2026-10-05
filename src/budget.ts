@@ -19,13 +19,3 @@ export function overSpend(job: Job, est: SpendEstimate): string | undefined {
   }
   return undefined;
 }
-
-export function overStorage(job: Job, usedBytes: number | undefined, addBytes: number): string | undefined {
-  if (!job.budget.storageLimitMb || usedBytes === undefined) return undefined;
-  const limit = job.budget.storageLimitMb * 1024 * 1024;
-  if (usedBytes + addBytes > limit) {
-    const mb = (b: number): string => (b / 1024 / 1024).toFixed(2);
-    return `storage would reach ${mb(usedBytes + addBytes)} MB, over budget.storageLimitMb (${job.budget.storageLimitMb} MB)`;
-  }
-  return undefined;
-}

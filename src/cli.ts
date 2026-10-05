@@ -9,6 +9,8 @@ import { ChatbaseRestSink } from './sinks/rest.js';
 import { ExportSink } from './sinks/export.js';
 import type { Sink } from './sinks/types.js';
 import { syncJob } from './sync.js';
+import { SkipCache } from './state.js';
+import { newJobReport } from './report.js';
 import { REPORT_SCHEMA_VERSION, renderSummary, writeReports, type RunReport } from './report.js';
 import { configureLog, log, registerSecret } from './util/log.js';
 import { ExitCode, UserError } from './util/errors.js';
@@ -19,6 +21,9 @@ const env = (k: string): string => process.env[k] ?? '';
 
 function makeSink(job: Job): Sink {
   if (job.sink === 'export') return new ExportSink(join(job.exportDir, job.name));
+  if (!env('CHATBASE_API_KEY')) {
+    throw new UserError('CHATBASE_API_KEY is not set (needed for sink: rest)', ExitCode.AuthOrPlan);
+  }
   return new ChatbaseRestSink(env('CHATBASE_API_KEY'), job.agentId!);
 }
 
@@ -36,6 +41,7 @@ function selectJobs(jobs: Job[], name?: string): Job[] {
 async function main(): Promise<number> {
   registerSecret(process.env.APIFY_TOKEN);
   registerSecret(process.env.CHATBASE_API_KEY);
+  registerSecret(process.env.YOUTUBE_API_KEY);
   let exitCode = 0;
 
   const program = new Command()
@@ -43,10 +49,10 @@ async function main(): Promise<number> {
     .description('Keep a Chatbase AI agent trained on YouTube videos, with timestamped answers.')
     .version(VERSION)
     .option('-c, --config <path>', 'config file', 'chatbase-youtube.yaml')
-    .option('--log-level <level>', 'debug | info | warn | error', 'info')
+    .option('--log-level <level>', 'debug | info | warn | error (default: $LOG_LEVEL or info)')
     .option('--pretty', 'human-readable logs instead of JSON lines', false)
     .hook('preAction', (cmd) => {
-      const o = cmd.opts<{ logLevel: 'debug' | 'info' | 'warn' | 'error'; pretty: boolean }>();
+      const o = cmd.opts<{ logLevel?: 'debug' | 'info' | 'warn' | 'error'; pretty: boolean }>();
       configureLog({ level: o.logLevel, pretty: o.pretty || process.stderr.isTTY });
     });
 
@@ -69,9 +75,20 @@ async function main(): Promise<number> {
       };
       for (const job of jobs) {
         log.info('job start', { job: job.name, sink: job.sink, full: o.full, dryRun: o.dryRun });
-        const out = await syncJob(job, { provider: makeProvider(job), sink: makeSink(job) }, o);
-        run.jobs.push(out.report);
-        exitCode = Math.max(exitCode, out.exitCode);
+        try {
+          const skipCache = new SkipCache(join(job.stateDir, `${job.name}.json`), job.recheckSkippedAfterDays);
+          const out = await syncJob(job, { provider: makeProvider(job), sink: makeSink(job), skipCache }, o);
+          run.jobs.push(out.report);
+          exitCode = Math.max(exitCode, out.exitCode);
+        } catch (e) {
+          // Setup failed (e.g. a missing key): record it and carry on with the other jobs.
+          const r = newJobReport(job.name, job.sink, o.full ? 'full' : 'incremental', o.dryRun);
+          r.aborted = (e as Error).message;
+          r.finishedAt = new Date().toISOString();
+          run.jobs.push(r);
+          log.error('job could not start', { job: job.name, error: r.aborted });
+          exitCode = Math.max(exitCode, e instanceof UserError ? e.exitCode : ExitCode.Unexpected);
+        }
       }
       run.exitCode = exitCode;
       await writeReports(run, o.report);

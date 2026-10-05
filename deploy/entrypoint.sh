@@ -8,12 +8,20 @@ CLI="node /app/dist/cli.js -c ${CONFIG:-/config/chatbase-youtube.yaml}"
 
 ping() { [ -n "${HEALTHCHECK_URL:-}" ] && wget -q -O /dev/null "${HEALTHCHECK_URL}$1" 2>/dev/null || true; }
 
-run_sync() {
-  ping /start
-  if $CLI sync --report /data/report.json "$@"; then ping ""; else code=$?; ping "/$code"; return $code; fi
-  if [ -n "${REPORT_WEBHOOK_URL:-}" ]; then
+post_report() {
+  if [ -n "${REPORT_WEBHOOK_URL:-}" ] && [ -f /data/report.json ]; then
     wget -q -O /dev/null --header 'content-type: application/json' --post-file /data/report.json "$REPORT_WEBHOOK_URL" || true
   fi
+}
+
+run_sync() {
+  ping /start
+  code=0
+  $CLI sync --report /data/report.json "$@" || code=$?
+  # Report every run, failures included: those are the ones worth seeing.
+  post_report
+  if [ "$code" -eq 0 ]; then ping ""; else ping "/$code"; fi
+  return "$code"
 }
 
 if [ "${1:-}" = "--once" ]; then shift; run_sync "$@"; exit $?; fi

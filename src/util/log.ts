@@ -17,7 +17,7 @@ export function redact(s: string): string {
   return out
     .replace(/(Bearer\s+)[A-Za-z0-9._~+/=-]{8,}/g, '$1***')
     .replace(/(apify_api_)[A-Za-z0-9]{8,}/g, '$1***')
-    .replace(/([?&]token=)[^&\s]+/g, '$1***');
+    .replace(/([?&](?:token|key)=)[^&\s]+/g, '$1***');
 }
 
 let minLevel: Level = (process.env.LOG_LEVEL as Level) in order ? (process.env.LOG_LEVEL as Level) : 'info';

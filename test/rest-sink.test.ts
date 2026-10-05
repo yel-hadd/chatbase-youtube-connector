@@ -145,6 +145,18 @@ describe('ChatbaseRestSink', () => {
     expect(calls.map((c) => c.method)).toEqual(['POST', 'GET', 'POST']);
   });
 
+  it('gives up after a second 5xx on create instead of posting again blindly', async () => {
+    const { fetchFn, calls } = fakeFetch([
+      () => json(502, { error: { code: 'UPSTREAM' } }),
+      () => json(200, { data: [], pagination: { cursor: null, hasMore: false, total: 0 } }),
+      () => json(502, { error: { code: 'UPSTREAM' } }),
+    ]);
+    await expect(new ChatbaseRestSink('key-12345678', 'a', fetchFn).create('x', 'YT·n', 'c', meta)).rejects.toThrow(
+      /502/,
+    );
+    expect(calls.map((c) => c.method)).toEqual(['POST', 'GET', 'POST']);
+  });
+
   it('retries 429 using Retry-After', async () => {
     const { fetchFn, calls } = fakeFetch([
       () => json(429, { error: { code: 'RATE_LIMIT_TOO_MANY_REQUESTS' } }, { 'retry-after': '0' }),

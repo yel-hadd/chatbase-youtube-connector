@@ -5,7 +5,6 @@ export interface FormattedVideo {
   videoId: string;
   title: string;
   url: string;
-  publishedAt?: string;
   parts: string[];
   hash: string;
 }

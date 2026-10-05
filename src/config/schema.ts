@@ -76,6 +76,9 @@ const defaultsSchema = z
     exclude: z.array(refString).default([]),
     sink: z.enum(['rest', 'export']).default('rest'),
     exportDir: z.string().default('out'),
+    /** Where the skip cache lives (one file per job). Keep it between runs to avoid paying twice. */
+    stateDir: z.string().default('.chatbase-youtube'),
+    recheckSkippedAfterDays: z.number().int().positive().default(30),
     actorId: z.string().default('codepoetry/youtube-transcript-ai-scraper'),
     actorBuild: z.string().optional(),
   })

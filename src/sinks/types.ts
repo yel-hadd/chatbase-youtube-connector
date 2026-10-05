@@ -19,7 +19,6 @@ export interface SourceMeta {
   hash: string;
   part: number;
   url: string;
-  publishedAt?: string;
 }
 
 /** The agent's storage plan limit was hit; stop creating, keep what is done. */

@@ -24,6 +24,13 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      # Remembers videos that had no captions or were too short, so they are not
+      # paid for again every day. Refreshed daily, so GitHub never evicts it.
+      - uses: actions/cache@v4
+        with:
+          path: .chatbase-youtube
+          key: chatbase-youtube-state-${{ github.run_id }}
+          restore-keys: chatbase-youtube-state-
       - uses: use-app/chatbase-youtube-connector@v1
         with:
           config: chatbase-youtube.yaml

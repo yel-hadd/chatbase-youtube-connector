@@ -86,7 +86,10 @@ export async function fetchFeed(
 
 /** URL for a source, in the form the transcript Actor accepts for a full listing. */
 export async function sourceListingUrl(src: Source, fetchFn: FetchFn = fetch): Promise<string> {
-  if ('channel' in src) return `https://www.youtube.com/channel/${await resolveChannelId(src.channel, fetchFn)}/videos`;
+  // The uploads playlist (UU…) holds every upload, including Shorts and live recordings,
+  // which the channel's /videos tab leaves out. Pruning relies on seeing all of them.
+  if ('channel' in src)
+    return `https://www.youtube.com/playlist?list=UU${(await resolveChannelId(src.channel, fetchFn)).slice(2)}`;
   if ('playlist' in src) return `https://www.youtube.com/playlist?list=${playlistIdOf(src.playlist)}`;
   const id = parseVideoId(src.video);
   if (!id) throw new UserError(`not a YouTube video: ${src.video}`, ExitCode.ConfigInvalid);

@@ -1,6 +1,7 @@
-# For Chatbase Free/Hobby (no API access): build upload-ready files weekly and
-# keep them as a workflow artifact. Upload the files listed in CHANGES.txt via
-# Sources → Files in the Chatbase dashboard.
+# For Chatbase Free/Hobby (no API access): build upload-ready transcript files
+# weekly and commit them to this repo. Then upload the files listed in
+# out/<job>/CHANGES.txt via Sources -> Files in the Chatbase dashboard.
+# Committing (rather than caching) keeps the state safe between weekly runs.
 name: Export YouTube transcripts for Chatbase
 on:
   schedule:
@@ -8,7 +9,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: chatbase-youtube-export
+  cancel-in-progress: false
 
 jobs:
   export:
@@ -16,18 +21,16 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      # Restore last run's files so only changed videos are rebuilt.
-      - uses: actions/cache@v4
-        with:
-          path: out
-          key: chatbase-export-${{ github.run_id }}
-          restore-keys: chatbase-export-
       - uses: use-app/chatbase-youtube-connector@v1
         with:
-          config: chatbase-youtube.export.yaml
+          config: chatbase-youtube.yaml # with `sink: export`
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: chatbase-upload
-          path: out
+      - name: Commit new and changed transcripts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add out
+          if [ -d .chatbase-youtube ]; then git add .chatbase-youtube; fi
+          git diff --cached --quiet || git commit -m 'chore: update YouTube transcripts for Chatbase'
+          git push

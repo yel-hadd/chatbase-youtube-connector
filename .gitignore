@@ -5,3 +5,5 @@ report.json
 summary.md
 .env
 *.log
+coverage
+.chatbase-youtube

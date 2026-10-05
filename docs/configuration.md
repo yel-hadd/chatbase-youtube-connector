@@ -169,11 +169,11 @@ The skip cache is an optimisation. Losing it only means skipped videos are check
 
 ## Environment variables
 
-| Variable                                                                       | Needed for                                                                       |
-| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| `APIFY_TOKEN`                                                                  | Any run that fetches transcripts (not needed for `--dry-run` or `validate`)      |
-| `CHATBASE_API_KEY`                                                             | `sink: rest`, including `--dry-run` (it reads what the agent already holds)      |
-| `YOUTUBE_API_KEY`                                                              | Optional: complete listings for playlists over 100 videos ([get a key](https://developers.google.com/youtube/registering_an_application)) |
-| `LOG_LEVEL`                                                                    | `debug`, `info` (default), `warn`, `error`. `--log-level` overrides it           |
-| Anything you reference as `${VAR}`                                             | Usually `CHATBASE_AGENT_ID`                                                      |
-| `SCHEDULE`, `FULL_SCHEDULE`, `HEALTHCHECK_URL`, `REPORT_WEBHOOK_URL`, `CONFIG` | Docker image only; see the [README](../README.md#quick-start-docker-on-a-server) |
+| Variable                                                                       | Needed for                                                                                                                                                      |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `APIFY_TOKEN`                                                                  | Any run that fetches transcripts (not needed for `--dry-run` or `validate`). [Where to find it](https://docs.apify.com/platform/integrations/api?fpr=use-apify) |
+| `CHATBASE_API_KEY`                                                             | `sink: rest`, including `--dry-run` (it reads what the agent already holds). [How to create one](https://www.chatbase.co/docs/api-v2/authentication)            |
+| `YOUTUBE_API_KEY`                                                              | Optional: complete listings for playlists over 100 videos ([get a key](https://developers.google.com/youtube/registering_an_application))                       |
+| `LOG_LEVEL`                                                                    | `debug`, `info` (default), `warn`, `error`. `--log-level` overrides it                                                                                          |
+| Anything you reference as `${VAR}`                                             | Usually `CHATBASE_AGENT_ID`                                                                                                                                     |
+| `SCHEDULE`, `FULL_SCHEDULE`, `HEALTHCHECK_URL`, `REPORT_WEBHOOK_URL`, `CONFIG` | Docker image only; see the [README](../README.md#quick-start-docker-on-a-server)                                                                                |

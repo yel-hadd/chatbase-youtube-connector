@@ -43,16 +43,16 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
-    "@types/node": "^22.7.0",
-    "@vitest/coverage-v8": "^2.1.9",
-    "eslint": "^9.39.5",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.4",
+    "@vitest/coverage-v8": "^5.0.3",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.9",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.0",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.71.0",
-    "vitest": "^2.1.0"
+    "vitest": "^5.0.3"
   },
   "author": "Yassine El Haddad (https://use-apify.com)",
   "repository": {

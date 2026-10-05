@@ -8,13 +8,14 @@ describe('naming', () => {
   it('round-trips', () => {
     const n = encodeName('tM3wpoieYTc', 'abcdef12', 'HelpDesk walkthrough');
     expect(n).toBe('YT·tM3wpoieYTc·abcdef12·HelpDesk walkthrough');
-    expect(decodeName(n)).toEqual({ videoId: 'tM3wpoieYTc', hash: 'abcdef12', part: 1 });
+    expect(decodeName(n)).toEqual({ videoId: 'tM3wpoieYTc', hash: 'abcdef12', part: 1, title: 'HelpDesk walkthrough' });
   });
   it('encodes parts', () => {
     expect(decodeName(encodeName('tM3wpoieYTc', 'abcdef12', 't', 3))).toEqual({
       videoId: 'tM3wpoieYTc',
       hash: 'abcdef12',
       part: 3,
+      title: 't',
     });
   });
   it('keeps emoji titles within 100 UTF-16 units, the unit Chatbase validates', () => {

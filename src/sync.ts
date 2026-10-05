@@ -1,15 +1,15 @@
 import type { Job, Source } from './config/schema.js';
 import { classifyRef, discoverRecent, listPlaylist, sourceListingUrl, warnTruncated } from './discover/youtube.js';
 import { formatTranscript } from './format/markdown.js';
-import { contentHash } from './plan/naming.js';
+import { contentHash, decodeName } from './plan/naming.js';
 import { planOps, type FormattedVideo, type Op } from './plan/diff.js';
 import { excludeReason } from './plan/filters.js';
 import { estimateSpend, overSpend } from './budget.js';
 import { newJobReport, record, type JobReport } from './report.js';
 import { StorageLimitError, type Sink } from './sinks/types.js';
 import type { TranscribeOptions, TranscribeResult } from './providers/apify.js';
-import { SkipCache } from './state.js';
-import { watchUrl, type OwnedSource, type Transcript, type VideoRef } from './types.js';
+import { SkipCache, skipFingerprint } from './state.js';
+import { watchUrl, type Transcript, type VideoRef } from './types.js';
 import { log } from './util/log.js';
 import { UserError, ExitCode } from './util/errors.js';
 import type { FetchFn } from './util/http.js';
@@ -59,7 +59,7 @@ function listingSize(job: Job, sources: Source[]): number {
 export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Promise<JobOutcome> {
   const mode = opts.full ? 'full' : 'incremental';
   const report = newJobReport(job.name, deps.sink.kind, mode, opts.dryRun);
-  const skips = deps.skipCache ?? new SkipCache(undefined, job.recheckSkippedAfterDays);
+  const skips = deps.skipCache ?? new SkipCache(undefined, job.recheckSkippedAfterDays, skipFingerprint(job));
   try {
     await skips.load();
     const owned = await deps.sink.list();
@@ -141,25 +141,43 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
         });
         return done(report, ExitCode.Ok);
       }
-      const seen = new Set<string>();
-      const failures: TranscribeResult['failures'] = [];
+      // One Actor run per source, in parallel. A source that fails or hits maxVideos makes
+      // the listing incomplete, which only disables pruning: the rest of the paid work is kept.
+      const listings = await Promise.allSettled(
+        job.sources.map(async (src) => {
+          const url = await sourceListingUrl(src, deps.fetchFn);
+          return { src, url, res: await deps.provider.transcribe([url], transcribeOpts(job, false, job.maxVideos)) };
+        }),
+      );
+      const byId = new Map<string, Transcript>();
+      const failureById = new Map<string, TranscribeResult['failures'][number]>();
       let truncated = false;
-      for (const src of job.sources) {
-        const url = await sourceListingUrl(src, deps.fetchFn);
-        const res = await deps.provider.transcribe([url], transcribeOpts(job, false, job.maxVideos));
+      for (const l of listings) {
+        if (l.status === 'rejected') {
+          truncated = true;
+          report.errors.push(`a source listing failed and was skipped: ${(l.reason as Error).message}`);
+          continue;
+        }
+        const { src, url, res } = l.value;
         collect(report, res, skips, /* recordFailures */ false);
-        for (const t of res.transcripts) seen.add(t.id);
-        for (const f of res.failures) seen.add(f.id);
-        transcripts.push(...res.transcripts);
-        failures.push(...res.failures);
+        // A video can sit in several sources (a channel and one of its playlists): keep one.
+        for (const t of res.transcripts) byId.set(t.id, t);
+        for (const f of res.failures) if (!byId.has(f.id)) failureById.set(f.id, f);
         if (!('video' in src) && res.transcripts.length + res.failures.length >= job.maxVideos) {
           truncated = true;
           log.warn('listing hit maxVideos; prune is skipped this run', { job: job.name, source: url });
         }
       }
+      for (const id of byId.keys()) failureById.delete(id);
+      const seen = new Set([...byId.keys(), ...failureById.keys()]);
+      transcripts.push(...byId.values());
+      const failures = [...failureById.values()];
 
       const needAi = job.aiFallback.enabled
-        ? failures.filter((f) => f.code === 'NO_CAPTIONS_AVAILABLE' && !ownedIds.has(f.id) && !excluded.has(f.id))
+        ? failures.filter(
+            (f) =>
+              f.code === 'NO_CAPTIONS_AVAILABLE' && !ownedIds.has(f.id) && !excluded.has(f.id) && !skips.isFresh(f.id),
+          )
         : [];
       if (needAi.length) {
         const ai = await deps.provider.transcribe(
@@ -172,7 +190,8 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
       const sentToAi = new Set(needAi.map((f) => f.id));
       for (const f of failures) if (!sentToAi.has(f.id)) recordFailure(report, skips, f);
 
-      if (job.prune && !truncated) goneIds = [...ownedIds].filter((id) => !seen.has(id));
+      // Excluded videos are removed under their own reason, so they never count as "gone".
+      if (job.prune && !truncated) goneIds = [...ownedIds].filter((id) => !seen.has(id) && !excluded.has(id));
     }
 
     const formatted: FormattedVideo[] = [];
@@ -194,13 +213,17 @@ export async function syncJob(job: Job, deps: SyncDeps, opts: SyncOptions): Prom
     }
 
     let ops = planOps(formatted, owned, goneIds, job.prune ? excludedOwned : []);
-    // Deletions of videos gone from YouTube are only known now, after the listing was paid for.
-    // Over the cap, keep the paid work: apply creates and updates, hold back the deletions.
-    const removals = ops.filter((o) => o.kind === 'delete' && o.reason === 'removed-from-youtube');
-    if (removals.length > job.budget.maxDeletesPerRun && !opts.allowMassDelete) {
+    // The delete cap counts videos removed for either reason. Exclusions were checked before
+    // any spend; deletions from YouTube are only known now, after the listing was paid for.
+    // Over the cap, keep the paid work: apply creates and updates, hold back those deletions.
+    const removedVideos = new Set(
+      ops.filter((o) => o.kind === 'delete' && o.reason === 'removed-from-youtube').map((o) => o.videoId),
+    );
+    const excludedVideos = job.prune ? excludedOwned.length : 0;
+    if (removedVideos.size + excludedVideos > job.budget.maxDeletesPerRun && !opts.allowMassDelete) {
       ops = ops.filter((o) => !(o.kind === 'delete' && o.reason === 'removed-from-youtube'));
       report.errors.push(
-        `${removals.length} videos look deleted from YouTube, over budget.maxDeletesPerRun (${job.budget.maxDeletesPerRun}); deletions held back. Re-run with --allow-mass-delete if intended.`,
+        `${removedVideos.size + excludedVideos} videos would be removed, over budget.maxDeletesPerRun (${job.budget.maxDeletesPerRun}); removals of videos missing from YouTube were held back. Re-run with --allow-mass-delete if intended.`,
       );
       report.capHit = true;
     }
@@ -263,61 +286,88 @@ function sizeDelta(op: Op): number {
 }
 
 async function apply(ops: Op[], sink: Sink, report: JobReport, room: number | undefined): Promise<void> {
-  // Deletions first: they free room for what follows.
-  const ordered = [...ops.filter((o) => o.kind === 'delete'), ...ops.filter((o) => o.kind !== 'delete')];
-  let left = room;
+  // Whole-video removals run first: they free room for what follows.
+  const removals = ops.filter((o) => o.kind === 'delete' && o.reason !== 'fewer-parts');
+  // Everything else is grouped per video, so a video is written whole or not at all, and a
+  // shrinking video writes its new parts before its surplus old parts are removed.
+  const groups = new Map<string, Op[]>();
+  for (const op of ops) {
+    if (op.kind === 'delete' && op.reason !== 'fewer-parts') continue;
+    const g = groups.get(op.videoId) ?? [];
+    g.push(op);
+    groups.set(op.videoId, g);
+  }
+
+  for (const op of removals) {
+    if (op.kind !== 'delete') continue;
+    try {
+      await sink.remove(op.existing);
+      if (room !== undefined) room += op.existing.size;
+      recordOnce(report, op.videoId, 'deleted', decodeName(op.existing.name)?.title, op.reason);
+    } catch (e) {
+      if (e instanceof UserError) throw e;
+      record(report, { videoId: op.videoId, action: 'failed', detail: (e as Error).message });
+    }
+  }
+
   let storageFull = false;
-  const doneVideos = new Set<string>();
-  for (const op of ordered) {
-    if (op.kind === 'skip') {
-      record(report, { videoId: op.videoId, action: 'unchanged' });
+  for (const [videoId, group] of groups) {
+    if (group.every((o) => o.kind === 'skip')) {
+      record(report, { videoId, action: 'unchanged' });
       continue;
     }
-    const delta = sizeDelta(op);
-    if (op.kind !== 'delete' && (storageFull || (left !== undefined && delta > left))) {
+    const writes = group.filter((o) => o.kind === 'create' || o.kind === 'update');
+    const surplus = group.filter((o) => o.kind === 'delete');
+    const delta = group.reduce((a, o) => a + sizeDelta(o), 0);
+    const title = writes[0]?.kind === 'create' || writes[0]?.kind === 'update' ? writes[0].video.title : undefined;
+    if (storageFull || (room !== undefined && delta > room)) {
       if (!storageFull) report.errors.push('storage limit reached; remaining videos were not synced');
       storageFull = true;
       report.capHit = true;
-      record(report, { videoId: op.videoId, action: 'skipped', detail: 'storage limit reached' });
+      record(report, { videoId, title, action: 'skipped', detail: 'storage limit reached' });
       continue;
     }
     try {
-      if (op.kind === 'create') await sink.create(op.videoId, op.name, op.content, metaOf(op));
-      else if (op.kind === 'update') await sink.update(op.existing, op.name, op.content, metaOf(op));
-      else await sink.remove(op.existing);
-      if (left !== undefined) left -= delta;
-      const action = op.kind === 'create' ? 'created' : op.kind === 'update' ? 'updated' : 'deleted';
-      // Count a multi-part video once.
-      const key = `${action}:${op.videoId}`;
-      if (!doneVideos.has(key)) {
-        doneVideos.add(key);
-        record(report, {
-          videoId: op.videoId,
-          title: op.kind === 'delete' ? titleOf(op.existing) : op.video.title,
-          action,
-          detail: op.kind === 'delete' ? op.reason : undefined,
-        });
+      for (const op of writes) {
+        if (op.kind === 'create') await sink.create(op.videoId, op.name, op.content, metaOf(op));
+        else await sink.update(op.existing, op.name, op.content, metaOf(op));
       }
+      for (const op of surplus) await sink.remove(op.existing);
+      if (room !== undefined) room -= delta;
+      recordOnce(
+        report,
+        videoId,
+        writes.some((o) => o.kind === 'create') && !writes.some((o) => o.kind === 'update') ? 'created' : 'updated',
+        title,
+      );
     } catch (e) {
       if (e instanceof StorageLimitError) {
         storageFull = true;
         report.capHit = true;
         report.errors.push(`Chatbase storage limit reached: ${e.message}`);
-        record(report, { videoId: op.videoId, action: 'skipped', detail: 'storage limit reached' });
+        record(report, { videoId, title, action: 'skipped', detail: 'storage limit reached' });
         continue;
       }
       if (e instanceof UserError) throw e; // auth/plan problems stop the job
-      record(report, { videoId: op.videoId, action: 'failed', detail: (e as Error).message });
+      // Parts already written keep their new hash; the next run finishes the video.
+      record(report, { videoId, title, action: 'failed', detail: (e as Error).message });
     }
   }
 }
 
-function metaOf(op: Extract<Op, { kind: 'create' | 'update' }>) {
-  return { title: op.video.title, hash: op.video.hash, part: op.part, url: op.video.url };
+function recordOnce(
+  report: JobReport,
+  videoId: string,
+  action: 'created' | 'updated' | 'deleted',
+  title: string | undefined,
+  detail?: string,
+): void {
+  if (report.videos.some((v) => v.videoId === videoId && v.action === action)) return;
+  record(report, { videoId, title, action, detail });
 }
 
-function titleOf(o: OwnedSource): string {
-  return o.name.replace(/^YT·[A-Za-z0-9_-]{11}·[0-9a-f]{8}·(?:p\d+·)?/, '');
+function metaOf(op: Extract<Op, { kind: 'create' | 'update' }>) {
+  return { title: op.video.title, hash: op.video.hash, part: op.part, url: op.video.url };
 }
 
 function done(report: JobReport, exitCode: ExitCode): JobOutcome {

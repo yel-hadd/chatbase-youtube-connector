@@ -9,9 +9,8 @@ import { ChatbaseRestSink } from './sinks/rest.js';
 import { ExportSink } from './sinks/export.js';
 import type { Sink } from './sinks/types.js';
 import { syncJob } from './sync.js';
-import { SkipCache } from './state.js';
-import { newJobReport } from './report.js';
-import { REPORT_SCHEMA_VERSION, renderSummary, writeReports, type RunReport } from './report.js';
+import { SkipCache, skipFingerprint } from './state.js';
+import { REPORT_SCHEMA_VERSION, newJobReport, renderSummary, writeReports, type RunReport } from './report.js';
 import { configureLog, log, registerSecret } from './util/log.js';
 import { ExitCode, UserError } from './util/errors.js';
 import { resolveChannelId, fetchFeed } from './discover/youtube.js';
@@ -76,7 +75,11 @@ async function main(): Promise<number> {
       for (const job of jobs) {
         log.info('job start', { job: job.name, sink: job.sink, full: o.full, dryRun: o.dryRun });
         try {
-          const skipCache = new SkipCache(join(job.stateDir, `${job.name}.json`), job.recheckSkippedAfterDays);
+          const skipCache = new SkipCache(
+            join(job.stateDir, `${job.name}.json`),
+            job.recheckSkippedAfterDays,
+            skipFingerprint(job),
+          );
           const out = await syncJob(job, { provider: makeProvider(job), sink: makeSink(job), skipCache }, o);
           run.jobs.push(out.report);
           exitCode = Math.max(exitCode, out.exitCode);

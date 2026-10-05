@@ -27,6 +27,8 @@ jobs:
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
       - name: Commit new and changed transcripts
+        # Also after a partial failure: the files written so far are valid and paid for.
+        if: always()
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

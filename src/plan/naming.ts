@@ -33,11 +33,12 @@ export function encodeName(videoId: string, hash: string, title: string, part = 
   return `${head}${chars.join('')}…`;
 }
 
+/** Parse one of our source names. Returns undefined for names this connector did not write. */
 export function decodeName(
   name: string | null | undefined,
-): { videoId: string; hash: string; part: number } | undefined {
+): { videoId: string; hash: string; part: number; title: string } | undefined {
   if (!name) return undefined;
   const m = RE.exec(name);
   if (!m) return undefined;
-  return { videoId: m[1]!, hash: m[2]!, part: m[3] ? Number(m[3]) : 1 };
+  return { videoId: m[1]!, hash: m[2]!, part: m[3] ? Number(m[3]) : 1, title: name.slice(m[0].length) };
 }

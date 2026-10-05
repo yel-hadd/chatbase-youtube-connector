@@ -9,7 +9,7 @@ import { ExportSink } from '../src/sinks/export.js';
 import { ChatbaseRestSink } from '../src/sinks/rest.js';
 import { sourceListingUrl } from '../src/discover/youtube.js';
 import { mapItem, type TranscribeOptions, type TranscribeResult } from '../src/providers/apify.js';
-import { SkipCache } from '../src/state.js';
+import { SkipCache, skipFingerprint } from '../src/state.js';
 import { renderSummary, writeReports, type RunReport } from '../src/report.js';
 import type { Transcript } from '../src/types.js';
 import { ExitCode } from '../src/util/errors.js';
@@ -175,7 +175,7 @@ jobs:
 describe('skip cache', () => {
   it('expires entries after the recheck window', () => {
     let now = new Date('2026-01-01T00:00:00Z');
-    const c = new SkipCache(undefined, 30, () => now);
+    const c = new SkipCache(undefined, 30, 'fp1', () => now);
     c.remember('aaaaaaaaaaa', 'NO_CAPTIONS_AVAILABLE');
     expect(c.isFresh('aaaaaaaaaaa')?.reason).toBe('NO_CAPTIONS_AVAILABLE');
     now = new Date('2026-02-01T00:00:00Z');
@@ -257,5 +257,123 @@ describe('report', () => {
     expect(md).toContain('[A / B](https://youtu.be/tM3wpoieYTc)');
     await writeReports(r, join(dir, 'report.json'));
     expect(JSON.parse(await readFile(join(dir, 'report.json'), 'utf8'))).toMatchObject({ exitCode: 0 });
+  });
+});
+
+describe('review fixes', () => {
+  const plConfig = (extra = '') => `version: 1
+jobs:
+  - name: j
+    sink: export
+    sources:
+      - channel: "UCpVc2Oc61kcUfBuz9lzP4MA"
+      - playlist: "PLos3GBCBcmJVmiJzQrSixdxQ6pqZe9ExX"
+${extra}`;
+
+  it('processes a video once when two sources both list it', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'cbyt-'));
+    const [job] = parseConfig(plConfig(), {});
+    const provider = new ScriptedProvider(() => [real[0]!]);
+    const out = await syncJob(job!, { provider, sink: new ExportSink(dir), fetchFn: noFetch }, run);
+    expect(out.report.counts.created).toBe(1);
+    expect(out.report.videos.filter((v) => v.videoId === real[0]!.id && v.action === 'created')).toHaveLength(1);
+  });
+
+  it('counts exclusions and YouTube deletions against one delete cap', async () => {
+    const excludedIds = ids(6, 'e');
+    const goneIds = ids(6, 'g');
+    const dir = await seededExport([...excludedIds, ...goneIds]);
+    const [job] = parseConfig(
+      `version: 1
+jobs:
+  - name: j
+    sink: export
+    prune: true
+    exclude: [${excludedIds.map((i) => `"${i}"`).join(', ')}]
+    sources: [{ playlist: "PLos3GBCBcmJVmiJzQrSixdxQ6pqZe9ExX" }]
+`,
+      {},
+    );
+    const out = await syncJob(
+      job!,
+      { provider: new ScriptedProvider(() => [real[0]!]), sink: new ExportSink(dir), fetchFn: noFetch },
+      run,
+    );
+    expect(out.exitCode).toBe(ExitCode.BudgetExceeded);
+    // Exclusions (6) are within the cap and applied; the 6 YouTube removals would exceed it.
+    expect(out.report.counts.deleted).toBe(6);
+    expect(out.report.counts.created).toBe(1);
+  });
+
+  it('keeps the other sources when one listing fails, and does not prune', async () => {
+    const dir = await seededExport(['ownedolder1']);
+    const [job] = parseConfig(plConfig('    prune: true\n'), {});
+    const provider: TranscriptProvider = {
+      async transcribe(urls) {
+        if (urls[0]!.includes('list=UU')) throw new Error('Actor run FAILED');
+        return { transcripts: [real[1]!], failures: [], runId: 'r', usageUsd: 0 };
+      },
+    };
+    const out = await syncJob(job!, { provider, sink: new ExportSink(dir), fetchFn: noFetch }, run);
+    expect(out.report.counts.created).toBe(1);
+    expect(out.report.counts.deleted).toBe(0);
+    expect(out.report.errors.join(' ')).toMatch(/listing failed/);
+  });
+
+  it('does not re-pay AI transcription for a cached skip in full mode', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'cbyt-'));
+    const [job] = parseConfig(plConfig('    aiFallback: { enabled: true }\n'), {});
+    const cache = new SkipCache(undefined, 30, 'fp');
+    cache.remember('nocaptions1', 'too-short');
+    const calls: string[][] = [];
+    const provider: TranscriptProvider = {
+      async transcribe(urls) {
+        calls.push(urls);
+        return { transcripts: [], failures: [{ id: 'nocaptions1', code: 'NO_CAPTIONS_AVAILABLE', message: '' }] };
+      },
+    };
+    await syncJob(job!, { provider, sink: new ExportSink(dir), fetchFn: noFetch, skipCache: cache }, run);
+    expect(calls).toHaveLength(2); // the two listings, no AI run
+  });
+
+  it('forgets skips decided under different settings', () => {
+    const a = new SkipCache(undefined, 30, 'settings-a');
+    a.remember('aaaaaaaaaaa', 'short');
+    expect(a.isFresh('aaaaaaaaaaa')).toBeDefined();
+    const [base] = parseConfig(plConfig(), {});
+    const [shorts] = parseConfig(plConfig('    includeShorts: true\n'), {});
+    expect(skipFingerprint(base!)).not.toBe(skipFingerprint(shorts!));
+  });
+
+  it('writes a shrinking video’s new parts before removing its surplus part', async () => {
+    const order: string[] = [];
+    const dir = await mkdtemp(join(tmpdir(), 'cbyt-'));
+    const inner = new ExportSink(dir);
+    const id = real[0]!.id;
+    await inner.create(id, 'n', 'x', { title: 't', hash: '00000000', part: 1, url: 'u' });
+    await inner.create(id, 'n', 'y', { title: 't', hash: '00000000', part: 2, url: 'u' });
+    await inner.finish();
+    const sink = new ExportSink(dir);
+    const spy: typeof sink = Object.assign(Object.create(Object.getPrototypeOf(sink) as object) as typeof sink, sink, {
+      update: async (...a: Parameters<typeof sink.update>) => {
+        order.push(`update p${a[3].part}`);
+        return sink.update(...a);
+      },
+      remove: async (o: Parameters<typeof sink.remove>[0]) => {
+        order.push(`remove p${o.part}`);
+        return sink.remove(o);
+      },
+    });
+    const [job] = parseConfig(
+      `version: 1
+jobs:
+  - name: j
+    sink: export
+    sources: [{ video: "${id}" }]
+`,
+      {},
+    );
+    await syncJob(job!, { provider: new ScriptedProvider(() => [real[0]!]), sink: spy, fetchFn: noFetch }, run);
+    expect(order).toEqual(['update p1', 'remove p2']);
   });
 });

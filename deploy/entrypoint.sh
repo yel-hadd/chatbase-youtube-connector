@@ -16,6 +16,8 @@ post_report() {
 
 run_sync() {
   ping /start
+  # Never post a previous run's report: remove it, so a crash leaves no report to send.
+  rm -f /data/report.json
   code=0
   $CLI sync --report /data/report.json "$@" || code=$?
   # Report every run, failures included: those are the ones worth seeing.

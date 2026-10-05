@@ -25,8 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Remembers videos that had no captions or were too short, so they are not
-      # paid for again every day. Refreshed daily, so GitHub never evicts it.
-      - uses: actions/cache@v4
+      # paid for again every day. Restored here, saved below even when the sync
+      # exits non-zero (exit 3/4 still carry useful skips).
+      - uses: actions/cache/restore@v4
         with:
           path: .chatbase-youtube
           key: chatbase-youtube-state-${{ github.run_id }}
@@ -40,6 +41,11 @@ jobs:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           CHATBASE_API_KEY: ${{ secrets.CHATBASE_API_KEY }}
           CHATBASE_AGENT_ID: ${{ vars.CHATBASE_AGENT_ID }}
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .chatbase-youtube
+          key: chatbase-youtube-state-${{ github.run_id }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

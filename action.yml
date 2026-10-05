@@ -34,7 +34,7 @@ runs:
     # action never depends on a separately published package.
     - shell: bash
       working-directory: ${{ github.action_path }}
-      run: npm ci --no-audit --no-fund && npm run build
+      run: npm ci --ignore-scripts --no-audit --no-fund && npm run build
     - id: run
       shell: bash
       env:

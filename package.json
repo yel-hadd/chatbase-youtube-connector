@@ -23,7 +23,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "coverage": "vitest run --coverage",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm run coverage"
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run coverage",
+    "prepare": "npm run build"
   },
   "keywords": [
     "chatbase",
@@ -52,5 +53,14 @@
     "typescript": "^5.6.0",
     "typescript-eslint": "^8.71.0",
     "vitest": "^2.1.0"
-  }
+  },
+  "author": "Yassine El Haddad (https://use-apify.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yel-hadd/chatbase-youtube-connector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yel-hadd/chatbase-youtube-connector/issues"
+  },
+  "homepage": "https://github.com/yel-hadd/chatbase-youtube-connector#readme"
 }

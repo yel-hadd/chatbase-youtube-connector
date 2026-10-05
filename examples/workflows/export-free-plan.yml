@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - uses: use-app/chatbase-youtube-connector@v1
+      - uses: yel-hadd/chatbase-youtube-connector@v1
         with:
           config: chatbase-youtube.yaml # with `sink: export`
         env:

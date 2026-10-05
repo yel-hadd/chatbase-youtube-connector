@@ -1,5 +1,7 @@
 # Chatbase YouTube Connector
 
+[![CI](https://github.com/yel-hadd/chatbase-youtube-connector/actions/workflows/ci.yml/badge.svg)](https://github.com/yel-hadd/chatbase-youtube-connector/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/yel-hadd/chatbase-youtube-connector)](https://github.com/yel-hadd/chatbase-youtube-connector/releases)
+
 Keep a [Chatbase](https://link.chatbase.co/yassine-el-haddad) AI agent trained on your YouTube channel, so it answers customers from your videos and links to the exact moment:
 
 > **Customer:** How do I hand a chat over to a human?
@@ -71,8 +73,8 @@ Every option is documented in [docs/configuration.md](docs/configuration.md).
 ```bash
 mkdir -p chatbase-youtube/data && cd chatbase-youtube
 sudo chown 1000:1000 data   # the container runs as an unprivileged user (uid 1000)
-curl -O https://raw.githubusercontent.com/use-app/chatbase-youtube-connector/main/docker-compose.yml
-curl -o chatbase-youtube.yaml https://raw.githubusercontent.com/use-app/chatbase-youtube-connector/main/examples/chatbase-youtube.yaml
+curl -O https://raw.githubusercontent.com/yel-hadd/chatbase-youtube-connector/main/docker-compose.yml
+curl -o chatbase-youtube.yaml https://raw.githubusercontent.com/yel-hadd/chatbase-youtube-connector/main/examples/chatbase-youtube.yaml
 printf 'APIFY_TOKEN=...\nCHATBASE_API_KEY=...\nCHATBASE_AGENT_ID=...\n' > .env && chmod 600 .env
 docker compose run --rm chatbase-youtube-sync doctor          # check everything, spend nothing
 docker compose run --rm chatbase-youtube-sync sync --dry-run  # see the plan
@@ -84,12 +86,12 @@ The container runs as a non-root user with a read-only filesystem. You can overr
 ## CLI
 
 ```bash
-npx chatbase-youtube-sync init                 # starter config
-npx chatbase-youtube-sync doctor               # tokens, plan access, agent, channels; no spend
-npx chatbase-youtube-sync sync --dry-run
-npx chatbase-youtube-sync sync                 # new videos
-npx chatbase-youtube-sync sync --full          # re-check everything
-npx chatbase-youtube-sync validate             # print the resolved config
+npx github:yel-hadd/chatbase-youtube-connector init                 # starter config
+npx github:yel-hadd/chatbase-youtube-connector doctor               # tokens, plan access, agent, channels; no spend
+npx github:yel-hadd/chatbase-youtube-connector sync --dry-run
+npx github:yel-hadd/chatbase-youtube-connector sync                 # new videos
+npx github:yel-hadd/chatbase-youtube-connector sync --full          # re-check everything
+npx github:yel-hadd/chatbase-youtube-connector validate             # print the resolved config
 ```
 
 | Exit code | Meaning                                                                        |
@@ -135,4 +137,6 @@ Storage: an hour of speech is roughly 55–65 KB of text. Chatbase plans allow 1
 npm ci && npm test && npm run build
 ```
 
-MIT licensed. Built by [use-apify.com](https://use-apify.com).
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Changes are listed in [CHANGELOG.md](CHANGELOG.md).
+
+MIT licensed. Built by [use-apify.com](https://use-apify.com). Step-by-step tutorial: [Connect a YouTube channel to Chatbase](https://use-apify.com/blog/chatbase-youtube-connector).

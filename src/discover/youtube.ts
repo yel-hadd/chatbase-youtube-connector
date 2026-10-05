@@ -5,7 +5,7 @@ import { parseVideoId, type VideoRef } from '../types.js';
 import { log } from '../util/log.js';
 import type { Source } from '../config/schema.js';
 
-const UA = 'Mozilla/5.0 (compatible; chatbase-youtube-sync; +https://github.com/use-app/chatbase-youtube-connector)';
+const UA = 'Mozilla/5.0 (compatible; chatbase-youtube-sync; +https://github.com/yel-hadd/chatbase-youtube-connector)';
 
 /** Resolve "@handle", a channel URL or a UC… id to a channel ID. */
 export async function resolveChannelId(input: string, fetchFn: FetchFn = fetch): Promise<string> {

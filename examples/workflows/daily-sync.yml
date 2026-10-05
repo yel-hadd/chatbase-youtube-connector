@@ -31,7 +31,7 @@ jobs:
           path: .chatbase-youtube
           key: chatbase-youtube-state-${{ github.run_id }}
           restore-keys: chatbase-youtube-state-
-      - uses: use-app/chatbase-youtube-connector@v1
+      - uses: yel-hadd/chatbase-youtube-connector@v1
         with:
           config: chatbase-youtube.yaml
           full: ${{ github.event.schedule == '43 4 * * 0' || inputs.full == true }}

@@ -1,6 +1,6 @@
 services:
   chatbase-youtube-sync:
-    image: ghcr.io/use-app/chatbase-youtube-connector:latest
+    image: ghcr.io/yel-hadd/chatbase-youtube-connector:latest
     restart: unless-stopped
     env_file: .env # APIFY_TOKEN, CHATBASE_API_KEY, CHATBASE_AGENT_ID, optional HEALTHCHECK_URL
     environment:

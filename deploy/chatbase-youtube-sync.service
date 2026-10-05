@@ -13,4 +13,4 @@ ExecStart=/usr/bin/docker run --rm --env-file .env \
   -v /opt/chatbase-youtube-sync/chatbase-youtube.yaml:/config/chatbase-youtube.yaml:ro \
   -v /opt/chatbase-youtube-sync/data:/data \
   --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
-  ghcr.io/use-app/chatbase-youtube-connector:latest --once
+  ghcr.io/yel-hadd/chatbase-youtube-connector:latest --once
